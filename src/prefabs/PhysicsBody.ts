@@ -63,23 +63,8 @@ export class PhysicsBody {
     this.state = PhysicsState.STATIC;
   }
 
-  public update() {
-    const groundCollision = this.checkGroundCollision();
-    if (this.state === PhysicsState.DYNAMIC && !groundCollision) {
-      // apply gravity
-      this.applyForce(0, PhysicsBody.GRAVITY * this.mass);
-    }
-
-    // update position based on velocity
-    this.position.add(this.velocity);
-
-    if (this.checkOutOfBounds()) {
-      this.velocity.x *= -1;
-    }
-
-    if (groundCollision && this.velocity.y > 0) {
-      this.velocity.y = 0;
-    }
+  public getState() {
+    return this.state;
   }
 
   public setState(value: number) {

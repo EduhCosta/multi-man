@@ -67,7 +67,7 @@ export class Minion extends Container {
 
   update() {
     this.currentState.handler();
-    this.physicsBody.update();
+    // this.physicsBody.update();
     this.position.set(this.physicsBody.x, this.physicsBody.y);
   }
 }
