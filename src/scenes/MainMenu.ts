@@ -17,13 +17,13 @@ export default class MainMenu extends Scene {
   async start() {
     // We should load all scene assets here
     await this.utils.assetLoader.loadAssetsGroup('MainMenu');
-    await this.utils.assetLoader.loadAssetsGroup('Game');
+    await this.utils.assetLoader.loadAssetsGroup('Level1');
 
     const startButton = new SpriteButton('Start', this.startGame).element;
 
     // Add elements to panel
     this.panel.append(startButton);
-    
+
     // Add elements to screen
     this.addChild(this.panel.frame);
   }
@@ -35,11 +35,13 @@ export default class MainMenu extends Scene {
   update(delta: number): void {}
   unload(): void {}
 
-  /** 
+  /**
    *  ########## Game Events ##########
    */
 
   async startGame() {
-    await sceneManager.switchScene('Game');
+    await sceneManager.switchScene('Level1');
   }
+
+  nextLevel(): void | Promise<void> {}
 }

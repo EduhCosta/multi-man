@@ -111,12 +111,12 @@ export class Minion extends PhysicsBody {
     this.debugMask = this.variation.drawMask();
     // this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
-
-    console.log(`Minion ${this.id} is now a ${this.variation.type}`);
   }
 
   async move() {
-    // ONLY MOVE IF GROUNDED
+    if (!this.state.isGrounded) {
+      return;
+    }
     const direction =
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     this.rigidBody.setLinvel(

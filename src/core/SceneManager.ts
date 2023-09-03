@@ -1,9 +1,11 @@
 import { Application } from 'pixi.js';
 import Scene, { AbstractConstructorType } from './Scene';
 import AssetLoader from './AssetLoader';
+import config, { Config } from '../config';
 
 export interface SceneUtils {
   assetLoader: AssetLoader;
+  config: Config;
 }
 
 export default class SceneManager {
@@ -86,6 +88,7 @@ export default class SceneManager {
   private async initScene(sceneName: string) {
     const sceneUtils = {
       assetLoader: new AssetLoader(),
+      config: config,
     };
 
     const scene = new this.sceneConstructors[sceneName](this.app, sceneUtils);

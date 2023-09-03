@@ -7,7 +7,7 @@
  */
 export function toDefaultScalarTime(ms: number)
 {
-    return (ms * 60) / 1000; // default scalar time in Pixi (60 fps)
+  return (ms * 60) / 1000; // default scalar time in Pixi (60 fps)
 }
 
 /**
@@ -17,7 +17,7 @@ export function toDefaultScalarTime(ms: number)
  */
 export function toSeconds(ms: number)
 {
-    return ms / 1000; // gsap uses seconds base
+  return ms / 1000; // gsap uses seconds base
 }
 
 

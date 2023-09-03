@@ -7,9 +7,9 @@
  */
 export function randomRange(min: number, max: number, floor = true)
 {
-    const value = Math.random() * (max - min) + min;
+  const value = Math.random() * (max - min) + min;
 
-    return floor ?  Math.floor(value) : value;
+  return floor ?  Math.floor(value) : value;
 }
 
 /**
@@ -20,5 +20,5 @@ export function randomRange(min: number, max: number, floor = true)
  */
 export function randomItem<T>(arr: T[], random = Math.random)
 {
-    return arr[Math.floor(random() * arr.length)];
+  return arr[Math.floor(random() * arr.length)];
 }

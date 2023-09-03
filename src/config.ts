@@ -1,7 +1,17 @@
-// import type { BgConfig } from './prefabs/ParallaxBackground';
-
-type Config = {
-  // background: BgConfig[];
+export type Config = {
+  minionCount: number;
+  gravity: {
+    x: number;
+    y: number;
+  };
+  debug: boolean;
 };
 
-export default {} as Config;
+export default {
+  minionCount: 5,
+  gravity: {
+    x: 0,
+    y: -9.81,
+  },
+  debug: true,
+} as Config;
