@@ -7,21 +7,7 @@ import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
 import { sceneManager } from '../main';
-
-export type GameSceneState = {
-  // Scene
-  spawnPoint: Point;
-  minions: Minion[];
-  platforms: Platform[];
-  fans: Fan[];
-  buttons: Button[];
-  endPoint: Point;
-  endLine: Endline | null;
-
-  // Game State
-  minionsAlive: number;
-  minionsEnded: number;
-};
+import BreakingPlatform from '../prefabs/BreakingPlatform';
 
 export default class Level1 extends Scene {
   name = 'Level1';
@@ -34,17 +20,45 @@ export default class Level1 extends Scene {
     const ground = new Platform(
       this.world,
       { x: 0, y: 0 },
-      { width: window.innerWidth, height: 100 },
+      { width: 1920, height: 10 },
     );
 
     this.state.platforms.push(ground);
 
     const platform1 = new Platform(
       this.world,
-      { x: 200, y: 500 },
-      { width: 200, height: 50 },
+      { x: 200, y: 700 },
+      { width: 210, height: 10 },
     );
     this.state.platforms.push(platform1);
+
+    const secondLevelHeight = 300;
+    const breakablePlatformWidth = 400;
+    const secondLevelWidth = (1920 / 2) - breakablePlatformWidth / 2;
+    const offset = -300;
+
+
+    const platform2 = new Platform(
+      this.world,
+      { x: (secondLevelWidth / 2) + offset / 2, y: secondLevelHeight },
+      { width: (secondLevelWidth / 2) + offset /2, height: 10 },
+    );
+    this.state.platforms.push(platform2);
+
+    const platform3 = new Platform(
+      this.world,
+      { x: 1920 - secondLevelWidth/2 + offset/2, y: secondLevelHeight },
+      { width: secondLevelWidth / 2 + -1 * offset/2, height: 10 },
+    );
+    this.state.platforms.push(platform3);
+
+    const platform4 = new BreakingPlatform(
+      this.world,
+      { x: secondLevelWidth + breakablePlatformWidth / 2 + offset, y: secondLevelHeight },
+      { width: breakablePlatformWidth/2, height: 10 },
+    );
+    this.state.platforms.push(platform4);
+    // endline:24:25:28
 
     // Add platforms to stage
     this.state.platforms.forEach((platform) => {
@@ -89,7 +103,6 @@ export default class Level1 extends Scene {
   }
 
   nextLevel() {
-    localStorage.setItem('@multi-man/next-level', 'Level2');
-    sceneManager.switchScene('WinGame');
+    sceneManager.switchScene('Level2');
   }
 }

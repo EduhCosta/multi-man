@@ -4,6 +4,7 @@ import { minionMap } from '../store';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
 import { MinionType } from './Minion';
+import { ThinMinion } from './ThinMinion';
 
 export class IconButton extends Container {
   public minionId: number;
@@ -40,6 +41,8 @@ export class IconButton extends Container {
     console.log(`Switching minion ${this.minionId} to ${this.icon}`);
     if (this.icon === 'fat') {
       minion.setVariation(new FatMinion());
+    } else if (this.icon === 'thin') {
+      minion.setVariation(new ThinMinion());
     } else {
       minion.setVariation(new DefaultMinion());
     }
@@ -53,14 +56,15 @@ export class IconButton extends Container {
     }
 
     if (this.icon === 'fat') {
+      this.element.texture = Texture.from('Game/images/thin.png');
+      this.icon = 'thin';
+      return;
+    }
+
+    if (this.icon === 'thin') {
       this.element.texture = Texture.from('Game/images/default.png');
       this.icon = 'default';
       return;
     }
-    // if (this.icon === 'thin') {
-    //   this.element.texture = Texture.from('Game/images/default.png');
-    //   this.icon = 'default';
-    //   return;
-    // }
   };
 }

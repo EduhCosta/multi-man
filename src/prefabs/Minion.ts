@@ -4,8 +4,7 @@ import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
 import { MinionAnimation } from './MinionAnimation';
-import { colliderToEntity, hudStore } from '../store';
-
+import { colliderToEntity } from '../store';
 
 export enum Directions {
   LEFT = -1,
@@ -14,7 +13,7 @@ export enum Directions {
 
 type AnimState = any;
 
-export type MinionType = 'default' | 'fat';
+export type MinionType = 'default' | 'fat' | 'thin';
 
 // Variation interface
 export interface MinionVariation {
@@ -55,14 +54,12 @@ export class Minion extends PhysicsBody {
     },
   };
   currentState = this.animStates.idle;
-
   state = {
     direction: Directions.RIGHT,
     isGrounded: false,
     hasEnded: false,
     isDead: false,
   };
-  debugMask: Graphics;
 
   constructor(
     world: World,
@@ -84,9 +81,6 @@ export class Minion extends PhysicsBody {
     this.animation = this.variation.runAnimation();
     this.animation.setParent(this);
 
-    this.debugMask = this.variation.drawMask();
-    // this.debugMask.onclick = this.onClick.bind(this);
-    this.addChild(this.debugMask);
     this.setState(this.animStates.walk);
     this.updateGlobalMaps();
   }
@@ -115,14 +109,9 @@ export class Minion extends PhysicsBody {
     this.updateGlobalMaps();
 
     // Update animation
+    this.animation.destroy();
     this.animation = this.variation.runAnimation();
     this.animation.setParent(this);
-
-    // Update mask
-    this.removeChild(this.debugMask);
-    this.debugMask = this.variation.drawMask();
-    // this.debugMask.onclick = this.onClick.bind(this);
-    this.addChild(this.debugMask);
   }
 
   async move() {
@@ -131,6 +120,13 @@ export class Minion extends PhysicsBody {
     }
     const direction =
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
+
+    if (
+      this.animation.anim.sprite
+    ) {
+      this.animation.anim.sprite.scale.x = -direction;
+      this.animation.anim.sprite.anchor.x = direction === Directions.RIGHT ? 1 : 0;
+    }
     this.rigidBody.setLinvel(
       {
         x: this.variation.speed * direction,
@@ -178,7 +174,11 @@ export class Minion extends PhysicsBody {
   }
 
   win() {
-    this.setState(this.animStates.dead);
+    this.setState(this.animStates.idle);
+    this.animation.destroy();
+    const minionAnimation = this.variation.runAnimation();
+    minionAnimation.setState(MinionAnimation.animStates.idle);
+    minionAnimation.setParent(this);
     this.state.hasEnded = true;
   }
 
