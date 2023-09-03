@@ -30,7 +30,8 @@ export default class SpritesheetAnimation extends Container {
     const sprite = new AnimatedSprite(textures);
 
     sprite.name = anim;
-    sprite.anchor.set(0.5);
+    sprite.anchor.set(1, 0);
+    sprite.scale.x = -1; // flip horizontally
     sprite.animationSpeed = this.speed;
 
     return sprite;
