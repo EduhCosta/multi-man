@@ -11,6 +11,7 @@ export default class Loading extends Scene {
       fill: 'white',
     });
 
+    text.anchor.set(0.5);
     text.resolution = 2;
     this.addChild(text);
   }

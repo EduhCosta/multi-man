@@ -46,7 +46,6 @@ export default class AssetLoader {
 
     this.assetFileUrls.forEach((assetPath) => {
       const match = assetPathRegexp.exec(assetPath);
-      console.log(match);
 
       if (!match || !match.groups) {
         return console.error(
