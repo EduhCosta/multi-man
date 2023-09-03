@@ -18,6 +18,10 @@ export function mToPx(m: number) {
   return m * 32;
 }
 
+const collisionGroups = {
+  minion: 0x0001,
+};
+
 export class PhysicsBody extends Container {
   // Rapier physics properties
   world: World;
@@ -50,6 +54,7 @@ export class PhysicsBody extends Container {
       )
       .setSolverGroups((this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION); // Set the membership and filter
     this.collider = this.world.createCollider(colliderDesc, this.rigidBody);
+    this.collider.setDensity(1.0);
     this.colliderHandle = this.collider.handle;
   }
 
@@ -58,7 +63,6 @@ export class PhysicsBody extends Container {
     const translation = this.rigidBody.translation();
     this.x = mToPx(translation.x) - this.width / 2;
     this.y = -mToPx(translation.y) - this.height / 2;
-
     this.checkBounds();
   }
 

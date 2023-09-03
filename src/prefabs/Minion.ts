@@ -13,9 +13,8 @@ export class Minion extends PhysicsBody {
   static WIDTH_PX = 100;
   static HEIGHT_PX = 200;
 
-
   config = {
-    speed: 5,
+    speed: 5 - 2 * Math.random(),
     turnDuration: 0.15,
     decelerateDuration: 0.1,
     scale: 1,
@@ -61,7 +60,7 @@ export class Minion extends PhysicsBody {
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     this.rigidBody.setLinvel(
       {
-        x: (this.config.speed - 2 * Math.random() )* direction,
+        x: this.config.speed * direction,
         y: this.rigidBody.linvel().y,
       },
       true,

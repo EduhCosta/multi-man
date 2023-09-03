@@ -3,13 +3,16 @@ import { Application, Graphics } from 'pixi.js';
 import { Minion } from '../prefabs/Minion';
 import { SceneUtils } from '../core/SceneManager';
 import * as RAPIER from '@dimforge/rapier2d';
+import { Fan } from '../prefabs/Fan';
+import { pxToM } from '../prefabs/PhysicsBody';
 
 const gravity = {
   x: 0,
   y: -9.81,
 };
 
-const mToP = 32; // Meter to pixels.
+const MINION_COUNT = 5;
+const mToP = 32;
 const groundGraphics = new Graphics();
 
 export default class Game extends Scene {
@@ -17,6 +20,7 @@ export default class Game extends Scene {
 
   private minions!: Minion[];
   public world: RAPIER.World;
+  private fan!: Fan;
 
   constructor(app: Application, protected utils: SceneUtils) {
     super(app, utils);
@@ -24,19 +28,16 @@ export default class Game extends Scene {
     this.world = new RAPIER.World(gravity);
 
     const groundColliderDesc = RAPIER.ColliderDesc.cuboid(
-      window.innerWidth / mToP,
-      1,
+      pxToM(window.innerWidth),
+      10,
     );
-    groundColliderDesc.setTranslation(0, (-1 * window.innerHeight) / mToP);
+    groundColliderDesc.setTranslation(0, -1 * pxToM(window.innerHeight));
     const groundCollider = this.world.createCollider(groundColliderDesc);
     this.app.stage.addChild(groundGraphics);
   }
 
   async load() {
     await this.utils.assetLoader.loadAssetsGroup('Game');
-
-    const MINION_COUNT = 5;
-
     this.minions = Array.from({ length: MINION_COUNT }, () => {
       const minion = new Minion(this.world);
       minion.x = window.innerWidth / 2;
@@ -44,6 +45,9 @@ export default class Game extends Scene {
       this.addChild(minion);
       return minion;
     });
+
+    this.fan = new Fan(this.world);
+    this.addChild(this.fan);
   }
 
   onResize(width: number, height: number) {}
@@ -53,6 +57,9 @@ export default class Game extends Scene {
     // Step simulation forward
     this.world.step();
     groundGraphics.clear();
+
+    // Update fan
+    this.fan.update();
 
     // Update minions
     this.minions.forEach((minion) => {
