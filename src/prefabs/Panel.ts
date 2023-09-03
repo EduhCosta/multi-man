@@ -1,5 +1,5 @@
 import { Vector2 } from 'pixi-spine';
-import { Color, Container, Graphics } from 'pixi.js';
+import { Color, Container, Graphics, Sprite } from 'pixi.js';
 import { centerObjects } from '../utils/misc';
 
 export class Panel extends Container {
@@ -17,6 +17,12 @@ export class Panel extends Container {
   }
 
   private setup(size: Vector2, color: Color) {
+    const bg = Sprite.from('Game/images/logo.png');
+    bg.width = window.innerWidth;
+    bg.height = size.y;
+    bg.anchor.set(0);
+    this.frame.addChild(bg);
+
     this.frame.beginFill(color);
     this.frame.drawRect(0, 0, size.x, size.y);
     this.centralize();
@@ -35,9 +41,11 @@ export class Panel extends Container {
    * Centralize children on vertical center
    */
   public centralizeChildren() {
-    let prevSize = this.padding + 30;
+    let prevSize = this.padding + 900;
 
     this.frame.children.forEach(obj => {
+      if (obj instanceof Sprite) return;
+
       obj.x = this.dimensions.x / 2; 
       obj.y = prevSize;
 

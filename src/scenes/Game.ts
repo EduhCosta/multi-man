@@ -11,6 +11,8 @@ import { minionMap } from '../store';
 import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
+import { Sound } from '@pixi/sound';
+import { SoundManager } from '../prefabs/SoundManager';
 
 const gravity = {
   x: 0,
@@ -40,16 +42,10 @@ export default class Game extends Scene {
   }
 
   async load() {
-    await this.utils.assetLoader.loadAssetsGroup('Game');
-
-    // Default example
-    // this.defaultMinion = new MinionAnimation('default');
-    // this.defaultMinion.x = window.innerWidth / 2 - this.defaultMinion.width / 2;
-    // this.defaultMinion.y = window.innerHeight / 2;
-    // // Thin examples
-    // this.thinMinion = new MinionAnimation('thin');
-    // this.thinMinion.x = window.innerWidth / 2 + this.defaultMinion.width / 2;
-    // this.thinMinion.y = window.innerHeight / 2;
+    await this.utils.assetLoader.loadAssetsGroup('Game');    
+    
+    // Play music
+    SoundManager.getInstance().play('Game/sound/gameplay.mp3');
 
     // Create platforms
     const ground = new Platform(

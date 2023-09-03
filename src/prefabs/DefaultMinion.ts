@@ -1,6 +1,7 @@
 import { Minion, MinionVariation } from './Minion';
 import { Graphics } from 'pixi.js';
 import * as PIXI from 'pixi.js';
+import { MinionAnimation } from './MinionAnimation';
 
 export class DefaultMinion implements MinionVariation {
   type = 'default' as const;
@@ -11,9 +12,11 @@ export class DefaultMinion implements MinionVariation {
   turnDuration = 0.15;
   decelerateDuration = 0.1;
   scale = 1;
+  
   customBehavior() {
     console.log('Basic behavior');
   }
+
   drawMask() {
     // temporary mask
     const mask = new Graphics();
@@ -24,5 +27,12 @@ export class DefaultMinion implements MinionVariation {
     mask.hitArea = new PIXI.Rectangle(0, 0, this.WIDTH_PX, Minion.HEIGHT_PX);
     mask.drawRect(0, 0, 200, 200);
     return mask;
+  }
+
+  runAnimation(): MinionAnimation {
+    const defaultAnimation: MinionAnimation = new MinionAnimation('default');
+    defaultAnimation.setState(MinionAnimation.animStates.walk);
+
+    return defaultAnimation;
   }
 }

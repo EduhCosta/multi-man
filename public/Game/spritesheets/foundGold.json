@@ -1,0 +1,168 @@
+{"frames": {
+
+"FOUNDTHEGOLD0001.png":
+{
+	"frame": {"x":374,"y":761,"w":17,"h":16},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":195,"y":187,"w":17,"h":16},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0002.png":
+{
+	"frame": {"x":396,"y":258,"w":3,"h":3},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":3},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0003.png":
+{
+	"frame": {"x":364,"y":894,"w":35,"h":109},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":185,"y":0,"w":35,"h":109},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0004.png":
+{
+	"frame": {"x":364,"y":894,"w":35,"h":109},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":185,"y":0,"w":35,"h":109},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0005.png":
+{
+	"frame": {"x":243,"y":894,"w":119,"h":109},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":143,"y":0,"w":119,"h":109},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0006.png":
+{
+	"frame": {"x":243,"y":894,"w":119,"h":109},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":143,"y":0,"w":119,"h":109},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0007.png":
+{
+	"frame": {"x":1,"y":894,"w":240,"h":110},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":83,"y":0,"w":240,"h":110},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0008.png":
+{
+	"frame": {"x":1,"y":894,"w":240,"h":110},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":83,"y":0,"w":240,"h":110},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0009.png":
+{
+	"frame": {"x":1,"y":761,"w":371,"h":131},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":371,"h":131},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0010.png":
+{
+	"frame": {"x":1,"y":761,"w":371,"h":131},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":371,"h":131},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0011.png":
+{
+	"frame": {"x":1,"y":514,"w":393,"h":245},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":393,"h":245},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0012.png":
+{
+	"frame": {"x":1,"y":514,"w":393,"h":245},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":393,"h":245},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0013.png":
+{
+	"frame": {"x":1,"y":1,"w":402,"h":255},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":402,"h":255},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0014.png":
+{
+	"frame": {"x":1,"y":1,"w":402,"h":255},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":402,"h":255},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0015.png":
+{
+	"frame": {"x":1,"y":258,"w":393,"h":254},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":393,"h":254},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0016.png":
+{
+	"frame": {"x":1,"y":258,"w":393,"h":254},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":393,"h":254},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"FOUNDTHEGOLD0017.png":
+{
+	"frame": {"x":1,"y":258,"w":393,"h":254},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":393,"h":254},
+	"sourceSize": {"w":403,"h":296},
+	"anchor": {"x":0.5,"y":0.5}
+}},
+"animations": {
+	"FOUNDTHEGOLD": ["FOUNDTHEGOLD0001.png","FOUNDTHEGOLD0002.png","FOUNDTHEGOLD0003.png","FOUNDTHEGOLD0004.png","FOUNDTHEGOLD0005.png","FOUNDTHEGOLD0006.png","FOUNDTHEGOLD0007.png","FOUNDTHEGOLD0008.png","FOUNDTHEGOLD0009.png","FOUNDTHEGOLD0010.png","FOUNDTHEGOLD0011.png","FOUNDTHEGOLD0012.png","FOUNDTHEGOLD0013.png","FOUNDTHEGOLD0014.png","FOUNDTHEGOLD0015.png","FOUNDTHEGOLD0016.png","FOUNDTHEGOLD0017.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "foundGold.png",
+	"format": "RGBA8888",
+	"size": {"w":404,"h":1005},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:5fcd82ba508119947e52eceacb482a98:66ba1dc3e935119d6ebceabae5b05e2e:614ea909822de78384fddd1fe3c9db0c$"
+}
+}

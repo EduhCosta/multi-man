@@ -4,6 +4,7 @@ import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
 import { colliderToEntity } from '../store';
+import { MinionAnimation } from './MinionAnimation';
 
 export enum Directions {
   LEFT = -1,
@@ -26,6 +27,7 @@ export interface MinionVariation {
   scale: number;
   customBehavior(): void;
   drawMask(): Graphics;
+  runAnimation(): MinionAnimation;
 }
 
 export class Minion extends PhysicsBody {
@@ -35,6 +37,7 @@ export class Minion extends PhysicsBody {
 
   id: number;
   variation: MinionVariation = new DefaultMinion();
+  animation!: MinionAnimation;
 
   animStates: Record<string, AnimState> = {
     idle: {
@@ -74,6 +77,10 @@ export class Minion extends PhysicsBody {
     }
     this.id = Minion.UID++;
 
+    // Call the animation and set this container as parent of object
+    this.animation = this.variation.runAnimation();
+    this.animation.setParent(this);
+
     this.debugMask = this.variation.drawMask();
     this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
@@ -104,6 +111,10 @@ export class Minion extends PhysicsBody {
     );
     this.updateGlobalMaps();
 
+    // Update animation
+    this.animation = this.variation.runAnimation();
+    this.animation.setParent(this);
+    
     // Update mask
     this.removeChild(this.debugMask);
     this.debugMask = this.variation.drawMask();
