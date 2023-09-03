@@ -19,17 +19,37 @@ const gravity = {
 const MINION_COUNT = 1;
 const mToP = 32;
 
+export type GameSceneState = {
+  // Scene
+  spawnPoint: Point;
+  minions: Minion[];
+  platforms: Platform[];
+  fans: Fan[];
+  buttons: Button[];
+  endPoint: Point;
+  endLine: Endline | null;
+
+  // Game State
+  minionsAlive: number;
+  minionsEnded: number;
+};
+
 const debugGraphics = new Graphics();
 export default class Game extends Scene {
   name = 'Game';
-
-  private spawnPoint = new Point(0, window.innerHeight);
-  private platforms: Platform[] = [];
-  private minions: Minion[] = [];
   public world: RAPIER.World;
-  private endLine!: Endline;
+  public state: GameSceneState = {
+    spawnPoint: new Point(0, window.innerHeight),
+    endPoint: new Point(window.innerWidth, window.innerHeight),
+    minions: [],
+    platforms: [],
+    fans: [],
+    buttons: [],
+    endLine: null,
 
-  private fan!: Fan;
+    minionsAlive: MINION_COUNT,
+    minionsEnded: 0,
+  };
 
   constructor(app: Application, protected utils: SceneUtils) {
     super(app, utils);
@@ -38,50 +58,61 @@ export default class Game extends Scene {
     this.app.stage.addChild(debugGraphics);
   }
 
-  async load() {
-    // Create platforms
+  loadPlatforms() {
     const ground = new Platform(
       this.world,
       { x: 0, y: 0 },
       { width: window.innerWidth, height: 100 },
     );
 
-    this.platforms.push(ground);
-    this.addChild(ground);
+    this.state.platforms.push(ground);
 
     const platform1 = new Platform(
       this.world,
-      { x: 300, y: 1000 },
-      { width: 300, height: 50 },
+      { x: 200, y:500 },
+      { width: 200, height: 50 },
     );
-    this.platforms.push(platform1);
-    this.addChild(platform1);
+    this.state.platforms.push(platform1);
+
     const platform2 = new Platform(
       this.world,
-      { x: window.innerWidth - 500, y: 1000 },
-      { width: 500, height: 50 },
+      { x: window.innerWidth - 300, y: 500 },
+      { width: 300, height: 50 },
     );
-    this.platforms.push(platform2);
-    this.addChild(platform2);
+    this.state.platforms.push(platform2);
 
+    // Add platforms to stage
+    this.state.platforms.forEach((platform) => {
+      this.addChild(platform);
+    });
+  }
+
+  loadEntities() {
     // Create entities
-    this.fan = new Fan(this.world, {
+    const fan = new Fan(this.world, {
       x: window.innerWidth / 2,
       y: 0.75 * Fan.HEIGHT_PX,
     });
-    this.addChild(this.fan);
-
+    this.state.fans.push(fan);
+    this.addChild(fan);
     const button = new Button(
-      { x: this.fan.x - Button.WIDTH_PX * 2, y: 100 + Button.HEIGHT_PX },
-      this.fan,
+      { x: fan.x - Button.WIDTH_PX * 2, y: 100 + Button.HEIGHT_PX },
+      fan,
     );
+    this.state.buttons.push(button);
     this.addChild(button);
 
-    this.endLine = new Endline(this.world, {
+    // Create end point
+    this.state.endLine = new Endline(this.world, {
       x: window.innerWidth - 2 * Endline.WIDTH_PX,
       y: window.innerHeight - 2 * Endline.HEIGHT_PX,
     });
-    this.addChild(this.endLine);
+    this.addChild(this.state.endLine);
+  }
+
+  async load() {
+    this.loadPlatforms();
+    this.loadEntities();
   }
 
   async start() {
@@ -104,27 +135,52 @@ export default class Game extends Scene {
         return;
       }
 
-      const minion = new Minion(this.world, this.spawnPoint);
+      const minion = new Minion(this.world, this.state.spawnPoint);
       this.addChild(minion);
 
       // Add minion to global minion map
       minionMap.get().set(minion.id, minion);
 
-      this.minions.push(minion);
+      this.state.minions.push(minion);
       spawnedMinions++;
     };
 
     const intervalId = setInterval(spawnMinion, spawnInterval);
   }
 
+  updateMinionStatus() {
+    let minionsAlive = MINION_COUNT;
+    let minionsEnded = 0;
+
+    this.state.minions.forEach((minion) => {
+      if (minion.state.isDead) {
+        minionsAlive--;
+      }
+      if (minion.state.hasEnded) {
+        minionsEnded++;
+      }
+    });
+
+    this.state.minionsAlive = minionsAlive;
+    this.state.minionsEnded = minionsEnded;
+  }
+
+  checkWin() {
+    if (this.state.minionsAlive === this.state.minionsEnded) {
+      console.log('WIN PORRA');
+    }
+  }
+
   onResize(width: number, height: number) {
-    this.platforms.forEach((platform) => {
+    this.state.platforms.forEach((platform) => {
       platform.onResize(width, height);
     });
-    this.minions.forEach((minion) => {
+    this.state.minions.forEach((minion) => {
       minion?.onResize(width, height);
     });
-    this.fan.onResize(width, height);
+    this.state.fans.forEach((minion) => {
+      minion?.onResize(width, height);
+    });
   }
 
   update(delta: number) {
@@ -133,21 +189,25 @@ export default class Game extends Scene {
     debugGraphics.clear();
 
     // Update platforms
-    // Here the grounded status of minions is updated
-    this.platforms.forEach((platform) => {
+    this.state.platforms.forEach((platform) => {
       platform.update();
     });
 
-    // Update fan
-    this.fan.update();
+    this.state.fans.forEach((fan) => {
+      fan.update();
+    });
 
     // Update minions
-    this.minions.forEach((minion) => {
+    this.state.minions.forEach((minion) => {
       minion.update();
     });
 
     // Update endline
-    this.endLine.update();
+    this.state.endLine?.update();
+
+    // Check win
+    this.updateMinionStatus();
+    this.checkWin();
 
     const buffers = this.world.debugRender();
     const vtx = buffers.vertices;

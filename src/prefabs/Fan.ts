@@ -66,7 +66,7 @@ export class Fan extends Container implements Toggleable {
       minion.kill();
       this.destroy();
     }
-    rigidBody.applyImpulse({ x: 0, y: 4 }, true);
+    rigidBody.applyImpulse({ x: 0, y: 3 }, true);
   }
 
   enable() {
@@ -91,7 +91,8 @@ export class Fan extends Container implements Toggleable {
   drawMask() {
     // temporary mask
     const mask = new Graphics();
-    const color = this.state.enabled && !this.state.destroyed ? 0x00ff00 : 0xff0000;
+    const color =
+      this.state.enabled && !this.state.destroyed ? 0x00ff00 : 0xff0000;
     mask.beginFill(color);
     mask.drawRect(0, 0, Fan.WIDTH_PX, Fan.HEIGHT_PX);
     mask.endFill();

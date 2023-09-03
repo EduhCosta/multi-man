@@ -50,7 +50,7 @@ export default class Endline extends Container {
       console.error('No rigidBody or minion found for minionId', minionId);
       return;
     }
-    minion.kill();
+    minion.win();
   }
 
   update() {

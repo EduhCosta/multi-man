@@ -14,3 +14,4 @@ export const colliderToEntity = atom<Map<number, Entity>>(new Map());
 export const hudStore = atom<HUD | null>(null);
 
 
+export const gameSceneState = atom(null);

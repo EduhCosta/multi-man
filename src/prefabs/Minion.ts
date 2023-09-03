@@ -55,6 +55,8 @@ export class Minion extends PhysicsBody {
   state = {
     direction: Directions.RIGHT,
     isGrounded: false,
+    hasEnded: false,
+    isDead: false,
   };
   debugMask: Graphics;
 
@@ -73,7 +75,6 @@ export class Minion extends PhysicsBody {
       this.variation = initialVariation;
     }
     this.id = Minion.UID++;
-    console.log(this.id);
 
     this.debugMask = this.variation.drawMask();
     // this.debugMask.onclick = this.onClick.bind(this);
@@ -161,6 +162,12 @@ export class Minion extends PhysicsBody {
 
   kill() {
     this.setState(this.animStates.dead);
+    this.state.isDead = true;
+  }
+
+  win() {
+    this.setState(this.animStates.dead);
+    this.state.hasEnded = true;
   }
 
   onResize(width: number, height: number) {
