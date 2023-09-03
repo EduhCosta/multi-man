@@ -1,37 +1,35 @@
 import Scene from '../core/Scene';
-import { Texture, AnimatedSprite } from 'pixi.js';
+import { MinionAnimation } from '../prefabs/MinionAnimation';
 
 export default class Game extends Scene {
   name = 'Game';
 
-  private animation!: AnimatedSprite;
-  private textures!: Array<{ texture: Texture; time: number }>;
+  private defaultMinion!: MinionAnimation;
+  private thinMinion!: MinionAnimation;
 
   async load() {
     await this.utils.assetLoader.loadAssetsGroup('Game');
 
-    this.textures = [];
-
-    for (let i = 0; i < 17; i++) {
-      const tmpSprite = Texture.from(`/Game/players/idle-${i}.png`);
-      this.textures.push({ texture: tmpSprite, time: 60 });
-    }
-
-    this.animation = new AnimatedSprite(this.textures);
+    // Default example
+    this.defaultMinion = new MinionAnimation('default');
+    this.defaultMinion.x = (window.innerWidth / 2) - this.defaultMinion.width / 2;
+    this.defaultMinion.y = window.innerHeight / 2;
+    // Thin examples
+    this.thinMinion = new MinionAnimation('thin');
+    this.thinMinion.x = (window.innerWidth / 2) + this.defaultMinion.width / 2;
+    this.thinMinion.y = window.innerHeight / 2;
   }
 
   async start() {
-    this.animation.anchor.set(0.5);
-    this.animation.scale.set(0.5);
-    this.animation.x = (this.app.screen.width + this.animation.width) / 2;
-    this.animation.y = this.app.screen.height / 2;
-    this.animation.play();
-    this.addChild(this.animation);
+    this.addChild(this.defaultMinion, this.thinMinion);
   }
 
   onResize(width: number, height: number) {
-    this.animation.x = (width + this.animation.width) / 2;
-    this.animation.y = height / 2;
+    this.defaultMinion.x = (width / 2) - this.defaultMinion.width / 2;
+    this.defaultMinion.y = height / 2;
+
+    this.thinMinion.x = (width / 2) + this.defaultMinion.width / 2;
+    this.thinMinion.y = height / 2;
   }
 
   update(delta: number) {}
