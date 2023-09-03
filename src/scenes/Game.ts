@@ -6,7 +6,6 @@ import * as RAPIER from '@dimforge/rapier2d';
 import { Fan } from '../prefabs/Fan';
 import { minionMap } from '../store';
 import Platform from '../prefabs/Platform';
-import { pxToM } from '../prefabs/PhysicsBody';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
 
@@ -15,7 +14,7 @@ const gravity = {
   y: -9.81,
 };
 
-const MINION_COUNT = 5;
+const MINION_COUNT = 1;
 const mToP = 32;
 
 const debugGraphics = new Graphics();
@@ -65,8 +64,6 @@ export default class Game extends Scene {
     this.platforms.push(platform2);
     this.addChild(platform2);
 
-    this.spawnMinions();
-
     // Create entities
     this.fan = new Fan(this.world, {
       x: window.innerWidth / 2,
@@ -89,7 +86,7 @@ export default class Game extends Scene {
 
   spawnMinions() {
     let spawnedMinions = 0;
-    const spawnInterval = 500; // 1000ms or 1 second
+    const spawnInterval = 500;
 
     const spawnMinion = () => {
       if (spawnedMinions >= MINION_COUNT) {
@@ -120,12 +117,20 @@ export default class Game extends Scene {
     this.fan.onResize(width, height);
   }
 
-  async start() {}
+  async start() {
+    this.spawnMinions();
+  }
 
   update(delta: number) {
     // Step simulation forward
     this.world.step();
     debugGraphics.clear();
+
+    // Update platforms
+    // Here the grounded status of minions is updated
+    this.platforms.forEach((platform) => {
+      platform.update();
+    });
 
     // Update fan
     this.fan.update();

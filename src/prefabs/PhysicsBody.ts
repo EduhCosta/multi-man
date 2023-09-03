@@ -74,11 +74,11 @@ export class PhysicsBody extends Container {
     const translation = this.rigidBody.translation();
     this.x = mToPx(translation.x) - this.width / 2;
     this.y = -mToPx(translation.y) - this.height / 2;
-    this.checkBounds();
+    this.checkXBounds();
   }
 
   // Check if the sprite is out of bounds and reverse the velocity if so.
-  checkBounds() {
+  checkXBounds() {
     const direction =
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     if (

@@ -54,6 +54,7 @@ export class Minion extends PhysicsBody {
 
   state = {
     direction: Directions.RIGHT,
+    isGrounded: false,
   };
   debugMask: Graphics;
 
@@ -134,6 +135,17 @@ export class Minion extends PhysicsBody {
   update() {
     super.update();
     this.currentState.handler();
+    this.updateGrounded();
+  }
+
+  updateGrounded() {
+    const e = 10;
+    // reset to false if the minion has a positive y velocity
+    if (Math.abs(this.rigidBody.linvel().y) < e) {
+      this.state.isGrounded = true;
+    } else {
+      this.state.isGrounded = false;
+    }
   }
 
   onClick() {
