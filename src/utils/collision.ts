@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
 
-function boxesIntersect(a: Container, b: Container) {
+export function boxesIntersect(a: Container, b: Container) {
   const ab = a.getBounds();
   const bb = b.getBounds();
   return (

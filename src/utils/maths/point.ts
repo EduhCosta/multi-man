@@ -7,7 +7,7 @@ import { IPointData } from 'pixi.js';
  */
 export function magnitude(point: IPointData): number
 {
-    return Math.sqrt(point.x * point.x + point.y * point.y);
+  return Math.sqrt(point.x * point.x + point.y * point.y);
 }
 
 /**
@@ -18,7 +18,7 @@ export function magnitude(point: IPointData): number
  */
 export function distance(point1: IPointData, point2: IPointData): number
 {
-    return magnitude({ x: point1.x - point2.x, y: point1.y - point2.y });
+  return magnitude({ x: point1.x - point2.x, y: point1.y - point2.y });
 }
 
 /**
@@ -29,7 +29,7 @@ export function distance(point1: IPointData, point2: IPointData): number
  */
 export function scale(point: IPointData, scale: number): IPointData
 {
-    return { x: point.x * scale, y: point.y * scale };
+  return { x: point.x * scale, y: point.y * scale };
 }
 /**
  * Normalize a point.
@@ -38,9 +38,9 @@ export function scale(point: IPointData, scale: number): IPointData
  */
 export function normalize(point: IPointData): IPointData
 {
-    const mag = magnitude(point);
+  const mag = magnitude(point);
 
-    return scale(point, 1 / mag);
+  return scale(point, 1 / mag);
 }
 
 /**
@@ -51,7 +51,7 @@ export function normalize(point: IPointData): IPointData
  */
 export function add(point1: IPointData, point2: IPointData): IPointData
 {
-    return { x: point1.x + point2.x, y: point1.y + point2.y };
+  return { x: point1.x + point2.x, y: point1.y + point2.y };
 }
 
 /**
@@ -62,7 +62,7 @@ export function add(point1: IPointData, point2: IPointData): IPointData
  */
 export function sub(point1: IPointData, point2: IPointData): IPointData
 {
-    return { x: point1.x - point2.x, y: point1.y - point2.y };
+  return { x: point1.x - point2.x, y: point1.y - point2.y };
 }
 
 /**
@@ -73,7 +73,7 @@ export function sub(point1: IPointData, point2: IPointData): IPointData
  */
 export function dot(point1: IPointData, point2: IPointData): number
 {
-    return point1.x * point2.x + point1.y * point2.y;
+  return point1.x * point2.x + point1.y * point2.y;
 }
 
 /**
@@ -83,7 +83,7 @@ export function dot(point1: IPointData, point2: IPointData): number
  */
 export function pointToAngle(point: IPointData): number
 {
-    return Math.atan2(point.y, point.x);
+  return Math.atan2(point.y, point.x);
 }
 
 /**
@@ -93,7 +93,7 @@ export function pointToAngle(point: IPointData): number
  */
 export function angleToPoint(angle: number): IPointData
 {
-    return { x: Math.cos(angle), y: Math.sin(angle) };
+  return { x: Math.cos(angle), y: Math.sin(angle) };
 }
 
 /**
@@ -104,5 +104,5 @@ export function angleToPoint(angle: number): IPointData
  */
 export function point(x = 0, y = 0): IPointData
 {
-    return { x, y };
+  return { x, y };
 }

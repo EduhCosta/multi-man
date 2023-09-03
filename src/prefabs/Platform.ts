@@ -14,13 +14,15 @@ export function getHeightFromVelocity(
 
 export default class Platform extends Container {
   private colliderDesc: ColliderDesc;
-  private collider: Collider;
+  public collider: Collider;
 
   private groundColliderDesc: ColliderDesc;
-  private groundCollider: Collider;
+  public groundCollider: Collider;
 
-  private world: World;
+  public world: World;
   private groundGraphics: Graphics;
+
+  public size: { width: number; height: number };
 
   /**
    *
@@ -34,7 +36,7 @@ export default class Platform extends Container {
     size: { width: number; height: number },
   ) {
     super();
-
+    this.size = size;
     this.world = world;
     this.colliderDesc = ColliderDesc.cuboid(
       pxToM(size.width),

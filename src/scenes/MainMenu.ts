@@ -6,6 +6,7 @@ import { SpriteButton } from '../prefabs/SpriteButton';
 import { sceneManager } from '../main';
 import { SoundManager } from '../prefabs/SoundManager';
 
+
 export default class MainMenu extends Scene {
   name = 'MainMenu';
 
@@ -26,7 +27,7 @@ export default class MainMenu extends Scene {
 
     // Add elements to panel
     this.panel.append(startButton);
-    
+
     // Add elements to screen
     this.addChild(this.panel.frame);
   }
@@ -38,11 +39,13 @@ export default class MainMenu extends Scene {
   update(delta: number): void {}
   unload(): void {}
 
-  /** 
+  /**
    *  ########## Game Events ##########
    */
 
   async startGame() {
-    await sceneManager.switchScene('Game', true);
+    await sceneManager.switchScene('Level1');
   }
+
+  nextLevel(): void | Promise<void> {}
 }

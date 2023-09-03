@@ -15,7 +15,7 @@ export default class SpritesheetAnimation extends Container {
 
     this.name = name;
     this.speed = speed;
-    this.animationTextures = Assets.get(name).animations;
+    this.animationTextures = Assets.get(name)?.animations;
   }
 
   private initAnimation(anim: string) {

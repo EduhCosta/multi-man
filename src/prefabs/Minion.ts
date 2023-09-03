@@ -1,10 +1,11 @@
-import { Graphics, Point, Rectangle } from 'pixi.js';
+import { Graphics, Point } from 'pixi.js';
 import { World } from '@dimforge/rapier2d';
 import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
-import { colliderToEntity } from '../store';
 import { MinionAnimation } from './MinionAnimation';
+import { colliderToEntity, hudStore } from '../store';
+
 
 export enum Directions {
   LEFT = -1,
@@ -58,6 +59,8 @@ export class Minion extends PhysicsBody {
   state = {
     direction: Directions.RIGHT,
     isGrounded: false,
+    hasEnded: false,
+    isDead: false,
   };
   debugMask: Graphics;
 
@@ -82,7 +85,7 @@ export class Minion extends PhysicsBody {
     this.animation.setParent(this);
 
     this.debugMask = this.variation.drawMask();
-    this.debugMask.onclick = this.onClick.bind(this);
+    // this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
     this.setState(this.animStates.walk);
     this.updateGlobalMaps();
@@ -114,16 +117,18 @@ export class Minion extends PhysicsBody {
     // Update animation
     this.animation = this.variation.runAnimation();
     this.animation.setParent(this);
-    
+
     // Update mask
     this.removeChild(this.debugMask);
     this.debugMask = this.variation.drawMask();
-    this.debugMask.onclick = this.onClick.bind(this);
+    // this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
   }
 
   async move() {
-    // ONLY MOVE IF GROUNDED
+    if (!this.state.isGrounded) {
+      return;
+    }
     const direction =
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     this.rigidBody.setLinvel(
@@ -169,7 +174,15 @@ export class Minion extends PhysicsBody {
 
   kill() {
     this.setState(this.animStates.dead);
+    this.state.isDead = true;
   }
 
-  onResize(width: number, height: number) {}
+  win() {
+    this.setState(this.animStates.dead);
+    this.state.hasEnded = true;
+  }
+
+  onResize(width: number, height: number) {
+    console.log(width, height);
+  }
 }

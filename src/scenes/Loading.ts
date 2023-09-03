@@ -18,11 +18,11 @@ export default class Loading extends Scene {
 
   async start() {
     // We should load all scene assets here
-    await this.utils.assetLoader.loadAssetsGroup('Game');
     await this.utils.assetLoader.loadAssetsGroup('MainMenu');
   }
 
   onResize(width: number, height: number) {}
   update(delta: number): void {}
   unload(): void {}
+  nextLevel(): void | Promise<void> {}
 }

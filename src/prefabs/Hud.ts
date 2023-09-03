@@ -1,22 +1,40 @@
 import { Vector2 } from 'pixi-spine';
 import { Container } from 'pixi.js';
 import { SpriteButton } from './SpriteButton';
-import { sceneManager } from '../main';
 import { IconButton } from './IconButton';
+import { Minion } from './Minion';
+import { minionMap } from '../store';
 
 export class HUD extends Container {
   frame!: Container;
   private dimensions!: Vector2;
   private minionsQuantity!: number;
+  public buttons: IconButton[] = [];
 
-  active = 'default'; 
+  active = 'default';
 
-  constructor(size: Vector2, minionsQuantity: number) {
+  // Callbacks
+  private onNextLevelCallback!: () => void;
+  private onExitCallback!: () => void;
+
+  private startMinionId: number;
+
+  constructor(
+    size: Vector2,
+    minionsQuantity: number,
+    onNextLevel: () => void,
+    onExit: () => void,
+    startMinionId: number,
+  ) {
     super();
     this.frame = new Container();
     this.dimensions = size;
     this.minionsQuantity = minionsQuantity;
 
+    this.onNextLevelCallback = onNextLevel;
+    this.onExitCallback = onExit;
+
+    this.startMinionId = startMinionId;
     this.setup();
   }
 
@@ -24,24 +42,32 @@ export class HUD extends Container {
     this.frame.width = this.dimensions.x;
     this.frame.height = this.dimensions.y;
 
-    const startButton = new SpriteButton('Exit', this.exitGame).element;
+    const startButton = new SpriteButton('Exit', this.onExitCallback).element;
     startButton.x = 100;
     startButton.y = 60;
     this.frame.addChild(startButton);
 
-    this.createMinionButton();
+    const nextLevel = new SpriteButton('Next level', this.onNextLevelCallback)
+      .element;
+    nextLevel.x = 1920 - 100;
+    nextLevel.y = 60;
+    this.frame.addChild(nextLevel);
+
+    this.createMinionButtons();
   }
 
   /** ########### Game events ############## */
 
-  createMinionButton() {
-    const posY = this.dimensions.y - 130; 
+  createMinionButtons() {
+    const posY = this.dimensions.y - 130;
     for (let i = 0; i < this.minionsQuantity; i++) {
-      new IconButton(this.frame, new Vector2(100 + (i * 120), posY));
+      this.buttons.push(
+        new IconButton(
+          this.frame,
+          new Vector2(100 + i * 120, posY),
+          this.startMinionId + i,
+        ),
+      );
     }
-  }
-
-  async exitGame() {
-    await sceneManager.switchScene('MainMenu', true);
   }
 }
