@@ -24,7 +24,7 @@ export class SpriteButton extends Container {
     this.title.resolution = 2;
     this.title.anchor.set(0.5, 0.6);
 
-    this.sprite.width = 150;
+    this.sprite.width = 180;
     this.sprite.height = 60;
     this.sprite.anchor.set(0.5);
     

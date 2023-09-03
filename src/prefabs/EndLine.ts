@@ -1,7 +1,8 @@
 import { Collider, ColliderDesc, World } from '@dimforge/rapier2d';
-import { Container, Graphics, Rectangle } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite } from 'pixi.js';
 import { mToPx, pxToM } from './PhysicsBody';
 import { colliderToEntity, minionMap } from '../store';
+import { centerObjects } from '../utils/misc';
 
 export default class Endline extends Container {
   static WIDTH_PX = 100;
@@ -19,8 +20,12 @@ export default class Endline extends Container {
     );
     this.colliderDesc.setTranslation(pxToM(position.x), pxToM(position.y - window.innerHeight)).setSensor(true);
     this.collider = this.world.createCollider(this.colliderDesc);
-    const mask = this.drawMask();
-    this.addChild(mask);
+
+    // Setting sprite
+    const sprite = Sprite.from('Game/images/bau.png');
+    sprite.anchor.set(0.3);
+
+    this.addChild(sprite);
 
     this.x = mToPx(this.collider.translation().x) - Endline.WIDTH_PX / 2;
     this.y = -mToPx(this.collider.translation().y) - Endline.HEIGHT_PX / 2;

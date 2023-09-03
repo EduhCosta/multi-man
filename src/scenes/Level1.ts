@@ -88,6 +88,7 @@ export default class Level1 extends Scene {
   }
 
   nextLevel() {
-    sceneManager.switchScene('Level2');
+    localStorage.setItem('@multi-man/next-level', 'Level2');
+    sceneManager.switchScene('WinGame');
   }
 }
