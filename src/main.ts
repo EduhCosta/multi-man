@@ -3,4 +3,4 @@ import './style.css';
 
 export const sceneManager = new SceneManager();
 await sceneManager.switchScene('Loading');
-await sceneManager.switchScene('Game');
+await sceneManager.switchScene('MainMenu');
