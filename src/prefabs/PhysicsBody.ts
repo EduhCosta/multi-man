@@ -1,107 +1,69 @@
 import { Container } from 'pixi.js';
-import { Vector2 } from '../utils/maths/Vector2';
+import {
+  World,
+  RigidBodyDesc,
+  ColliderDesc,
+  RigidBodyHandle,
+  ColliderHandle,
+  RigidBody,
+  Collider,
+} from '@dimforge/rapier2d';
 import { Directions } from './Minion';
 
-export enum PhysicsState {
-  /** Not affected by forces and stays in the same position unless manually moved */
-  STATIC,
-  /** Affected by forces and changes its position */
-  DYNAMIC,
-  /** Affected by forces but with a pre-defined motion */
-  KINEMATIC,
+export function pxToM(px: number) {
+  return px / 32;
 }
 
-export class PhysicsBody {
-  public static GRAVITY = 9.8 * (1 / 60);
+export function mToPx(m: number) {
+  return m * 32;
+}
 
-  public UID = 0;
+export class PhysicsBody extends Container {
+  // Rapier physics properties
+  world: World;
+  rigidBody: RigidBody;
+  bodyHandle: RigidBodyHandle;
+  collider: Collider;
+  colliderHandle: ColliderHandle;
 
-  public readonly mass = -1;
+  constructor(world: World, width: number, height: number) {
+    super();
+    this.world = world;
 
-  /** Current position of the body. */
-  public position = new Vector2();
-  /** Current velocity of the body, used to apply constant force in a given direction. */
-  public velocity = new Vector2();
+    // Create a dynamic rigid-body.
+    const rigidBodyDesc = RigidBodyDesc.dynamic()
+      .setTranslation(0.0, 0)
+      .lockRotations(); // prevent rotations.
 
-  /** Current force applied to the body. This data is stored for easy data assignment on added force. */
-  private readonly force = new Vector2();
-  /** Current physics state of the body. */
-  private state: PhysicsState = PhysicsState.STATIC;
+    this.rigidBody = this.world.createRigidBody(rigidBodyDesc);
+    this.bodyHandle = this.rigidBody.handle;
 
-  private entity: Container;
-
-  constructor(entity: Container) {
-    this.entity = entity;
+    // Create a cuboid collider attached to the dynamic rigidBody.
+    const colliderDesc = ColliderDesc.cuboid(width / 2, height / 2);
+    this.collider = this.world.createCollider(colliderDesc, this.rigidBody);
+    this.colliderHandle = this.collider.handle;
   }
 
-  /**
-   * Applies a force to the body.
-   * @param forceX X component of the force.
-   * @param forceY Y component of the force.
-   */
-  public applyForce(forceX: number, forceY: number) {
-    // Only apply force if not a static object
-    if (this.state !== PhysicsState.STATIC) {
-      // Set force to force object, prevents need for creating new vector each time
-      this.force.set(forceX, forceY);
-      // Add force divided by mass to velocity
-      this.velocity.add(this.force.divideScalar(this.mass));
-    }
+  // Update the position of the sprite based on the physics body.
+  update() {
+    const translation = this.rigidBody.translation();
+    this.x = mToPx(translation.x) - this.width / 2;
+    this.y = -mToPx(translation.y) - this.height / 2;
+
+    this.checkBounds();
   }
 
-  /** Sets the velocity of the body to zero. */
-  public zeroVelocity() {
-    this.force.setScalar(0);
-    this.velocity.setScalar(0);
-  }
-
-  /** Resets the physics body to its initial state. */
-  public reset() {
-    this.force.set(0, 0);
-    this.position.set(0, 0);
-    this.velocity.set(0, 0);
-    this.state = PhysicsState.STATIC;
-  }
-
-  public getState() {
-    return this.state;
-  }
-
-  public setState(value: number) {
-    // If the body is set to static, nullify constant forces
-    if (value === PhysicsState.STATIC) {
-      this.zeroVelocity();
-    }
-    this.state = value;
-  }
-
-  public get x() {
-    return this.position.x;
-  }
-
-  public get y(): number {
-    return this.position.y;
-  }
-
-  checkOutOfBounds = (): boolean => {
-    const direction = this.velocity.x > 0 ? Directions.RIGHT : Directions.LEFT;
-    const boundary =
-      direction === Directions.LEFT ? 0 : window.innerWidth - this.entity.width;
+  // Check if the sprite is out of bounds and reverse the velocity if so.
+  checkBounds() {
+    const direction =
+      this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     if (
-      (direction === Directions.LEFT && this.x <= boundary) ||
-      (direction === Directions.RIGHT && this.x >= boundary)
+      (direction === Directions.LEFT && this.x < 0) ||
+      (direction === Directions.RIGHT &&
+        this.x > window.innerWidth - this.width)
     ) {
-      return true;
+      const { x: curX, y: curY } = this.rigidBody.linvel();
+      this.rigidBody.setLinvel({ x: -1 * curX, y: curY }, true);
     }
-    return false;
-  };
-
-  checkGroundCollision = (): boolean => {
-    const groundHeight = 50;
-    const boundary = window.innerHeight - this.entity.height - groundHeight;
-    if (this.y >= boundary) {
-      return true;
-    }
-    return false;
-  };
+  }
 }

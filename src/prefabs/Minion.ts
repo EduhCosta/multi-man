@@ -1,5 +1,6 @@
-import { Container, Graphics } from 'pixi.js';
-import { PhysicsBody, PhysicsState } from './PhysicsBody';
+import { Graphics } from 'pixi.js';
+import { World } from '@dimforge/rapier2d';
+import { PhysicsBody, pxToM } from './PhysicsBody';
 
 export enum Directions {
   LEFT = -1,
@@ -8,7 +9,10 @@ export enum Directions {
 
 type AnimState = any;
 
-export class Minion extends Container {
+export class Minion extends PhysicsBody {
+  static WIDTH_PX = 100;
+  static HEIGHT_PX = 200;
+
   config = {
     speed: 5,
     turnDuration: 0.15,
@@ -32,18 +36,13 @@ export class Minion extends Container {
     direction: Directions.RIGHT,
   };
 
-  public physicsBody: PhysicsBody;
+  constructor(world: World) {
+    super(world, pxToM(Minion.WIDTH_PX), pxToM(Minion.HEIGHT_PX));
 
-  constructor() {
-    super();
-    this.physicsBody = new PhysicsBody(this);
-    this.physicsBody.setState(PhysicsState.DYNAMIC);
-    this.physicsBody.position.set(this.position.x, this.position.y);
-
+    // temporary mask
     const mask = new Graphics();
-    // Add the rectangular area to show
-    mask.beginFill(0xff0000);
-    mask.drawRect(0, 0, 200, 200);
+    mask.beginFill(0x00ff00);
+    mask.drawRect(0, 0, Minion.WIDTH_PX, Minion.HEIGHT_PX);
     mask.endFill();
     this.addChild(mask);
 
@@ -51,10 +50,15 @@ export class Minion extends Container {
   }
 
   async move() {
-    const walkSpeed = this.config.speed;
-    if (Math.abs(this.physicsBody.velocity.x) < walkSpeed) {
-      this.physicsBody.applyForce(walkSpeed, 0);
-    }
+    const direction =
+      this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
+    this.rigidBody.setLinvel(
+      {
+        x: this.config.speed * direction,
+        y: this.rigidBody.linvel().y,
+      },
+      true,
+    );
   }
 
   setState(state: AnimState) {
@@ -66,8 +70,7 @@ export class Minion extends Container {
   }
 
   update() {
+    super.update();
     this.currentState.handler();
-    // this.physicsBody.update();
-    this.position.set(this.physicsBody.x, this.physicsBody.y);
   }
 }
