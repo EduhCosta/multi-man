@@ -1,5 +1,6 @@
 import { Minion, MinionVariation } from './Minion';
 import { Graphics, Rectangle } from 'pixi.js';
+import { MinionAnimation } from './MinionAnimation';
 
 export class FatMinion implements MinionVariation {
   type = 'fat' as const;
@@ -10,6 +11,7 @@ export class FatMinion implements MinionVariation {
   turnDuration = 0.2;
   decelerateDuration = 0.15;
   scale = 2;
+
   drawMask() {
     // temporary mask
     const mask = new Graphics();
@@ -21,7 +23,15 @@ export class FatMinion implements MinionVariation {
     mask.drawRect(0, 0, 200, 200);
     return mask;
   }
+
   customBehavior() {
     console.log('Fat behavior');
+  }
+
+  runAnimation(): MinionAnimation {
+    const defaultAnimation: MinionAnimation = new MinionAnimation('fat');
+    defaultAnimation.setState(MinionAnimation.animStates.walk);
+    
+    return defaultAnimation;
   }
 }

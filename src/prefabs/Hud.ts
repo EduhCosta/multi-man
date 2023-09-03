@@ -41,7 +41,7 @@ export class HUD extends Container {
     }
   }
 
-  exitGame() {
-    sceneManager.switchScene('MainMenu');
+  async exitGame() {
+    await sceneManager.switchScene('MainMenu', true);
   }
 }

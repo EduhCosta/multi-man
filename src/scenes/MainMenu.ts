@@ -4,6 +4,7 @@ import { Panel } from '../prefabs/Panel';
 import { Vector2 } from 'pixi-spine';
 import { SpriteButton } from '../prefabs/SpriteButton';
 import { sceneManager } from '../main';
+import { SoundManager } from '../prefabs/SoundManager';
 
 export default class MainMenu extends Scene {
   name = 'MainMenu';
@@ -11,7 +12,9 @@ export default class MainMenu extends Scene {
   private panel!: Panel;
 
   async load() {
-    this.panel = new Panel(new Vector2(800, 500), new Color('#242424'));
+    this.panel = new Panel(new Vector2(1920, 1080), new Color('#242424'));
+
+    SoundManager.getInstance().play('Game/sound/menu.mp3');
   }
 
   async start() {
@@ -19,7 +22,7 @@ export default class MainMenu extends Scene {
     await this.utils.assetLoader.loadAssetsGroup('MainMenu');
     await this.utils.assetLoader.loadAssetsGroup('Game');
 
-    const startButton = new SpriteButton('Start', this.startGame).element;
+    const startButton = new SpriteButton('Start', this.startGame.bind(this)).element;
 
     // Add elements to panel
     this.panel.append(startButton);
@@ -40,6 +43,6 @@ export default class MainMenu extends Scene {
    */
 
   async startGame() {
-    await sceneManager.switchScene('Game');
+    await sceneManager.switchScene('Game', true);
   }
 }
