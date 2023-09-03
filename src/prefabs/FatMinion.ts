@@ -5,7 +5,7 @@ export class FatMinion implements MinionVariation {
   type = 'fat' as const;
   WIDTH_PX = 100;
   HEIGHT_PX = 200;
-  gravityScale = 10;
+  gravityScale = 5;
   speed = 2;
   turnDuration = 0.2;
   decelerateDuration = 0.15;

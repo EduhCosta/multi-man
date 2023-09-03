@@ -1,4 +1,4 @@
-import { Graphics, Point, Rectangle } from 'pixi.js';
+import { Graphics, Point } from 'pixi.js';
 import { World } from '@dimforge/rapier2d';
 import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
@@ -160,5 +160,7 @@ export class Minion extends PhysicsBody {
     this.setState(this.animStates.dead);
   }
 
-  onResize(width: number, height: number) {}
+  onResize(width: number, height: number) {
+    console.log(width, height);
+  }
 }

@@ -1,6 +1,5 @@
 import { Vector2 } from 'pixi-spine';
 import Scene from '../core/Scene';
-import { MinionAnimation } from '../prefabs/MinionAnimation';
 import { HUD } from '../prefabs/Hud';
 import { Application, Graphics, Point } from 'pixi.js';
 import { Minion } from '../prefabs/Minion';
@@ -11,6 +10,7 @@ import { minionMap } from '../store';
 import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
+import BreakingPlatform from '../prefabs/BreakingPlatform';
 
 const gravity = {
   x: 0,
@@ -94,6 +94,16 @@ export default class Game extends Scene {
       y: window.innerHeight - 2 * Endline.HEIGHT_PX,
     });
     this.addChild(this.endLine);
+
+    const breakingPlatform = new BreakingPlatform(this.world, {
+      x: 800,
+      y: 500,
+    }, {
+      width: 100,
+      height: 50,
+    });
+    this.platforms.push(breakingPlatform);
+    this.addChild(breakingPlatform);
   }
 
   async start() {
@@ -133,7 +143,7 @@ export default class Game extends Scene {
       platform.onResize(width, height);
     });
     this.minions.forEach((minion) => {
-      minion.onResize(width, height);
+      minion?.onResize(width, height);
     });
     this.fan.onResize(width, height);
   }
