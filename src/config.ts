@@ -8,7 +8,7 @@ export type Config = {
 };
 
 export default {
-  minionCount: 5,
+  minionCount: 2,
   gravity: {
     x: 0,
     y: -9.81,

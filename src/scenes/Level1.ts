@@ -7,6 +7,7 @@ import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
 import { sceneManager } from '../main';
+import Background from '../prefabs/Background';
 
 export type GameSceneState = {
   // Scene
@@ -34,7 +35,8 @@ export default class Level1 extends Scene {
     const ground = new Platform(
       this.world,
       { x: 0, y: 0 },
-      { width: window.innerWidth, height: 100 },
+      { width: window.innerWidth, height: 30 },
+      { src: 'Game/images/l1_plat.png', height: 250 },
     );
 
     this.state.platforms.push(ground);
@@ -42,13 +44,14 @@ export default class Level1 extends Scene {
     const platform1 = new Platform(
       this.world,
       { x: 200, y: 500 },
-      { width: 200, height: 50 },
+      { width: 200, height: 30 },
     );
     this.state.platforms.push(platform1);
 
     // Add platforms to stage
     this.state.platforms.forEach((platform) => {
       this.addChild(platform);
+      platform.zIndex = 99;
     });
   }
 
@@ -58,6 +61,7 @@ export default class Level1 extends Scene {
       x: window.innerWidth - 2 * Endline.WIDTH_PX,
       y: 2 * Endline.HEIGHT_PX,
     });
+    this.state.endLine.zIndex = 101;
     this.addChild(this.state.endLine);
   }
 
@@ -65,6 +69,12 @@ export default class Level1 extends Scene {
     await this.utils.assetLoader.loadAssetsGroup('Game');
     this.loadPlatforms();
     this.loadEntities();
+
+    const bg = new Background();
+    bg.zIndex = -99;
+    this.sortableChildren = true;
+    this.sortChildren();
+    this.addChild(bg);
   }
 
   update(delta: number) {

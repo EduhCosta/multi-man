@@ -14,12 +14,12 @@ export default class WinGame extends Scene {
   private graph!: Graphics;
   private bg!: Sprite;
   private currentState: AnimState | null = null;
-  
+
   static animStates: Record<string, AnimState> = {
     default: {
       anim: 'FOUNDTHEGOLD',
-      loop: false, 
-      speed: 0.3, 
+      loop: false,
+      speed: 0.3,
     },
   };
 
@@ -51,7 +51,8 @@ export default class WinGame extends Scene {
     this.currentState = WinGame.animStates.default;
     this.anim.play(WinGame.animStates.default);
     centerObjects(this.anim);
-    this.anim.scale.set(1.5);
+    this.anim.scale.set(-1, 1);
+    this.anim.position.y = 100;
 
     // Add elements to screen
     this.addChild(this.graph);

@@ -1,6 +1,6 @@
 import { Collider, ColliderDesc, World } from '@dimforge/rapier2d';
-import { Container, Graphics } from 'pixi.js';
-import { pxToM } from './PhysicsBody';
+import { Container, Graphics, Sprite, Texture, TilingSprite } from 'pixi.js';
+import { mToPx, pxToM } from './PhysicsBody';
 import { colliderToEntity, minionMap } from '../store';
 import { Minion } from './Minion';
 
@@ -34,6 +34,7 @@ export default class Platform extends Container {
     world: World,
     position: { x: number; y: number },
     size: { width: number; height: number },
+    textureSrc: { src: string, height: number, } = { src: 'Game/images/l1_plat_float.png', height: 120},
   ) {
     super();
     this.size = size;
@@ -58,6 +59,16 @@ export default class Platform extends Container {
 
     this.groundGraphics = new Graphics();
     this.addChild(this.groundGraphics);
+
+    // Setting sprite
+    const translation = this.collider.translation();
+    this.x = mToPx(translation.x) - this.width / 2;
+    this.y = -mToPx(translation.y) - this.height / 2;
+
+    const texture = Texture.from(textureSrc.src);
+    const tilingSprite = new TilingSprite(texture, 2 * size.width, textureSrc.height);
+    tilingSprite.anchor.set(0.5, 1);
+    this.addChild(tilingSprite);
   }
 
   onCollision(collider2: Collider) {

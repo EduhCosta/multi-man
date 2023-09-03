@@ -13,6 +13,7 @@ import { Button } from '../prefabs/Button';
 import Endline from '../prefabs/EndLine';
 import { Sound } from '@pixi/sound';
 import { SoundManager } from '../prefabs/SoundManager';
+import Background from '../prefabs/Background';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AbstractConstructorType<T> = new (...args: any[]) => T;
@@ -91,6 +92,7 @@ export abstract class Scene extends Container implements IScene {
       this.exitGame.bind(this),
       Minion.UID,
     );
+    hud.frame.zIndex = 110;
     this.addChild(hud.frame);
 
     this.spawnMinions();
@@ -108,6 +110,7 @@ export abstract class Scene extends Container implements IScene {
       }
 
       const minion = new Minion(this.world, this.state.spawnPoint);
+      minion.zIndex = 100;
       this.addChild(minion);
 
       // Add minion to global minion map
@@ -139,7 +142,8 @@ export abstract class Scene extends Container implements IScene {
 
   checkWin() {
     if (this.state.minionsAlive === this.state.minionsEnded) {
-      console.log('WIN PORRA');
+      this.destroy();
+      this.nextLevel();
     }
   }
 
