@@ -1,5 +1,8 @@
+import { Vector2 } from 'pixi-spine';
 import Scene from '../core/Scene';
 import { MinionAnimation } from '../prefabs/MinionAnimation';
+import { HUD } from '../prefabs/Hud';
+import { sceneManager } from '../main';
 
 export default class Game extends Scene {
   name = 'Game';
@@ -21,7 +24,12 @@ export default class Game extends Scene {
   }
 
   async start() {
+    await this.utils.assetLoader.loadAssetsGroup('MainMenu');
+
+    const hud = new HUD(new Vector2(1920, 1080), 5);
+    
     this.addChild(this.defaultMinion, this.thinMinion);
+    this.addChild(hud.frame);
   }
 
   onResize(width: number, height: number) {
