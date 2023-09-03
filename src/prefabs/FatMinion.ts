@@ -1,4 +1,3 @@
-import { World } from '@dimforge/rapier2d';
 import { Minion, MinionVariation } from './Minion';
 import { Graphics, Rectangle } from 'pixi.js';
 

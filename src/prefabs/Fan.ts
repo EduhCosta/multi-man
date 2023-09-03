@@ -20,7 +20,7 @@ export class Fan extends Container {
     enabled: true,
   };
 
-  constructor(world: World) {
+  constructor(world: World, position: { x: number; y: number }) {
     super();
     this.world = world;
 
@@ -37,8 +37,8 @@ export class Fan extends Container {
       pxToM(Fan.HEIGHT_PX),
     );
     this.colliderDesc.setTranslation(
-      pxToM(window.innerWidth - 300),
-      pxToM(-1 * (window.innerHeight - 500)),
+      pxToM(position.x),
+      pxToM(position.y - window.innerHeight),
     );
 
     this.colliderDesc.setSensor(true);
@@ -79,14 +79,15 @@ export class Fan extends Container {
       return true; // Return `false` instead if we want to stop searching for other colliders that contain this point.
     });
 
+    const colliderOffsetY = Fan.HEIGHT_PX - 100;
     this.x = mToPx(this.collider.translation().x) - Fan.WIDTH_PX / 2;
-    this.y = mToPx(-1 * this.collider.translation().y) + Fan.HEIGHT_PX / 2;
+    this.y = -mToPx(this.collider.translation().y) - Fan.HEIGHT_PX / 2 + colliderOffsetY;
   }
 
   onResize(width: number, height: number) {
     this.colliderDesc.setTranslation(
-      pxToM(window.innerWidth - 300),
-      pxToM(-1 * (window.innerHeight - 500)),
+      pxToM(width * 0.7),
+      pxToM(-1 * (height - 500)),
     );
   }
 }

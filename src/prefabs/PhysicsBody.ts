@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Point } from 'pixi.js';
 import {
   World,
   RigidBodyDesc,
@@ -42,13 +42,13 @@ export class PhysicsBody extends Container {
   MINION_GROUP = 0x0001; // First bit represents minion group
   EVERYTHING_BUT_MINION = 0xfffe; // All bits set except the minion group bit
 
-  constructor(world: World, width: number, height: number) {
+  constructor(world: World, width: number, height: number, spawnPosition: Point) {
     super();
     this.world = world;
 
     // Create a dynamic rigid-body.
     this.rigidBodyDesc = RigidBodyDesc.dynamic()
-      .setTranslation(pxToM(window.innerWidth) * Math.random(), 0)
+      .setTranslation(pxToM(spawnPosition.x), pxToM(spawnPosition.y - window.innerHeight/2))
       .lockRotations(); // prevent rotations.
 
     this.rigidBody = this.world.createRigidBody(this.rigidBodyDesc);

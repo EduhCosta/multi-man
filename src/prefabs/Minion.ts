@@ -1,4 +1,4 @@
-import { Graphics, Rectangle } from 'pixi.js';
+import { Graphics, Point, Rectangle } from 'pixi.js';
 import { World } from '@dimforge/rapier2d';
 import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
@@ -57,12 +57,22 @@ export class Minion extends PhysicsBody {
   };
   debugMask: Graphics;
 
-  constructor(world: World, initialVariation?: MinionVariation) {
-    super(world, pxToM(Minion.WIDTH_PX), pxToM(Minion.HEIGHT_PX));
+  constructor(
+    world: World,
+    spawnPoint: Point,
+    initialVariation?: MinionVariation,
+  ) {
+    super(
+      world,
+      pxToM(Minion.WIDTH_PX),
+      pxToM(Minion.HEIGHT_PX),
+      new Point(spawnPoint.x, window.innerHeight - 300),
+    );
     if (initialVariation) {
       this.variation = initialVariation;
     }
     this.id = Minion.UID++;
+
     this.debugMask = this.variation.drawMask();
     this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
@@ -101,6 +111,7 @@ export class Minion extends PhysicsBody {
   }
 
   async move() {
+    // ONLY MOVE IF GROUNDED
     const direction =
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     this.rigidBody.setLinvel(
