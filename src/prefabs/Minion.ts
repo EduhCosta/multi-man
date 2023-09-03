@@ -3,7 +3,7 @@ import { World } from '@dimforge/rapier2d';
 import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
-import { colliderToEntity } from '../store';
+import { colliderToEntity, hudStore } from '../store';
 
 export enum Directions {
   LEFT = -1,
@@ -73,9 +73,10 @@ export class Minion extends PhysicsBody {
       this.variation = initialVariation;
     }
     this.id = Minion.UID++;
+    console.log(this.id);
 
     this.debugMask = this.variation.drawMask();
-    this.debugMask.onclick = this.onClick.bind(this);
+    // this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
     this.setState(this.animStates.walk);
     this.updateGlobalMaps();
@@ -107,8 +108,10 @@ export class Minion extends PhysicsBody {
     // Update mask
     this.removeChild(this.debugMask);
     this.debugMask = this.variation.drawMask();
-    this.debugMask.onclick = this.onClick.bind(this);
+    // this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
+
+    console.log(`Minion ${this.id} is now a ${this.variation.type}`);
   }
 
   async move() {

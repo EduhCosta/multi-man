@@ -6,11 +6,10 @@ import { Minion } from '../prefabs/Minion';
 import { SceneUtils } from '../core/SceneManager';
 import * as RAPIER from '@dimforge/rapier2d';
 import { Fan } from '../prefabs/Fan';
-import { minionMap } from '../store';
+import { hudStore, minionMap } from '../store';
 import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
-import BreakingPlatform from '../prefabs/BreakingPlatform';
 
 const gravity = {
   x: 0,
@@ -40,17 +39,6 @@ export default class Game extends Scene {
   }
 
   async load() {
-    await this.utils.assetLoader.loadAssetsGroup('Game');
-
-    // Default example
-    // this.defaultMinion = new MinionAnimation('default');
-    // this.defaultMinion.x = window.innerWidth / 2 - this.defaultMinion.width / 2;
-    // this.defaultMinion.y = window.innerHeight / 2;
-    // // Thin examples
-    // this.thinMinion = new MinionAnimation('thin');
-    // this.thinMinion.x = window.innerWidth / 2 + this.defaultMinion.width / 2;
-    // this.thinMinion.y = window.innerHeight / 2;
-
     // Create platforms
     const ground = new Platform(
       this.world,
@@ -94,23 +82,14 @@ export default class Game extends Scene {
       y: window.innerHeight - 2 * Endline.HEIGHT_PX,
     });
     this.addChild(this.endLine);
-
-    const breakingPlatform = new BreakingPlatform(this.world, {
-      x: 800,
-      y: 500,
-    }, {
-      width: 100,
-      height: 50,
-    });
-    this.platforms.push(breakingPlatform);
-    this.addChild(breakingPlatform);
   }
 
   async start() {
     await this.utils.assetLoader.loadAssetsGroup('MainMenu');
 
-    const hud = new HUD(new Vector2(1920, 1080), 5);
+    const hud = new HUD(new Vector2(1920, 1080), MINION_COUNT);
     this.addChild(hud.frame);
+    hudStore.set(hud);
 
     this.spawnMinions();
   }

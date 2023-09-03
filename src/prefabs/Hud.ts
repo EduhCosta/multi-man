@@ -3,13 +3,15 @@ import { Container } from 'pixi.js';
 import { SpriteButton } from './SpriteButton';
 import { sceneManager } from '../main';
 import { IconButton } from './IconButton';
+import { Minion } from './Minion';
 
 export class HUD extends Container {
   frame!: Container;
   private dimensions!: Vector2;
   private minionsQuantity!: number;
+  public buttons: IconButton[] = [];
 
-  active = 'default'; 
+  active = 'default';
 
   constructor(size: Vector2, minionsQuantity: number) {
     super();
@@ -35,9 +37,11 @@ export class HUD extends Container {
   /** ########### Game events ############## */
 
   createMinionButton() {
-    const posY = this.dimensions.y - 130; 
+    const posY = this.dimensions.y - 130;
     for (let i = 0; i < this.minionsQuantity; i++) {
-      new IconButton(this.frame, new Vector2(100 + (i * 120), posY));
+      this.buttons.push(
+        new IconButton(this.frame, new Vector2(100 + i * 120, posY), Minion.UID - i),
+      );
     }
   }
 
