@@ -22,11 +22,17 @@ export class MinionAnimation extends Container {
       loop: true, 
       speed: 0.41, 
     },
+    floating: {
+      anim: 'floating',
+      loop: true, 
+      speed: 0.41, 
+    },
   };
 
   state = { // Initial state
     idle: true,
     walk: false,
+    floating: false,
     dead: false,
     velocity: {
       x: 0,
