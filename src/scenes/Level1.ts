@@ -62,6 +62,7 @@ export default class Level1 extends Scene {
   }
 
   async load() {
+    await this.utils.assetLoader.loadAssetsGroup('Game');
     this.loadPlatforms();
     this.loadEntities();
   }
