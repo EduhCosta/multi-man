@@ -8,6 +8,7 @@ import { minionMap } from '../store';
 import Platform from '../prefabs/Platform';
 import { pxToM } from '../prefabs/PhysicsBody';
 import Endline from '../prefabs/EndLine';
+import { Button } from '../prefabs/Button';
 
 const gravity = {
   x: 0,
@@ -64,12 +65,20 @@ export default class Game extends Scene {
     this.platforms.push(platform2);
     this.addChild(platform2);
 
-
     this.spawnMinions();
 
     // Create entities
-    this.fan = new Fan(this.world, { x: window.innerWidth / 2, y: .75 * Fan.HEIGHT_PX });
+    this.fan = new Fan(this.world, {
+      x: window.innerWidth / 2,
+      y: 0.75 * Fan.HEIGHT_PX,
+    });
     this.addChild(this.fan);
+
+    const button = new Button(
+      { x: this.fan.x - Button.WIDTH_PX * 2, y: 100 + Button.HEIGHT_PX },
+      this.fan,
+    );
+    this.addChild(button);
 
     this.endLine = new Endline(this.world, {
       x: window.innerWidth - 2 * Endline.WIDTH_PX,
