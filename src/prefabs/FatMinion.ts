@@ -3,6 +3,7 @@ import { Minion, MinionVariation } from './Minion';
 import { Graphics, Rectangle } from 'pixi.js';
 
 export class FatMinion implements MinionVariation {
+  type = 'fat' as const;
   WIDTH_PX = 100;
   HEIGHT_PX = 200;
   gravityScale = 10;

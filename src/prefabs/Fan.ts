@@ -6,6 +6,7 @@ import {
   ColliderHandle,
   World,
 } from '@dimforge/rapier2d';
+import { colliderToEntity, minionMap } from '../store';
 
 export class Fan extends Container {
   static WIDTH_PX = 100;
@@ -14,6 +15,10 @@ export class Fan extends Container {
   colliderDesc: ColliderDesc;
   collider: Collider;
   colliderHandle: ColliderHandle;
+
+  state = {
+    enabled: true,
+  };
 
   constructor(world: World) {
     super();
@@ -42,9 +47,29 @@ export class Fan extends Container {
   }
 
   onCollision(collider2: Collider) {
+    if (!this.state.enabled) return;
+
     const rigidBody = collider2.parent();
-    if (!rigidBody) return;
+    const minionId = colliderToEntity.get().get(collider2.handle);
+    if (!minionId) {
+      console.error('No minionId found for collider2', collider2.handle);
+      return;
+    }
+    const minion = minionMap.get().get(minionId.id);
+    if (!rigidBody || !minion) {
+      console.error('No rigidBody or minion found for minionId', minionId);
+      return;
+    }
+
+    if (minion.variation.type === 'fat') {
+      minion.kill();
+      this.disable();
+    }
     rigidBody.applyImpulse({ x: 0, y: 4 }, true);
+  }
+
+  disable() {
+    this.state.enabled = false;
   }
 
   update() {

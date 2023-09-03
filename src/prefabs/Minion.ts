@@ -3,6 +3,7 @@ import { World } from '@dimforge/rapier2d';
 import { PhysicsBody, pxToM } from './PhysicsBody';
 import { DefaultMinion } from './DefaultMinion';
 import { FatMinion } from './FatMinion';
+import { colliderToEntity } from '../store';
 
 export enum Directions {
   LEFT = -1,
@@ -11,8 +12,11 @@ export enum Directions {
 
 type AnimState = any;
 
+export type MinionType = 'default' | 'fat';
+
 // Variation interface
 export interface MinionVariation {
+  type: MinionType;
   WIDTH_PX: number;
   HEIGHT_PX: number;
   gravityScale: number;
@@ -25,9 +29,11 @@ export interface MinionVariation {
 }
 
 export class Minion extends PhysicsBody {
+  static UID = 0;
   static WIDTH_PX = 50;
   static HEIGHT_PX = 200;
 
+  id: number;
   variation: MinionVariation = new DefaultMinion();
 
   animStates: Record<string, AnimState> = {
@@ -39,13 +45,16 @@ export class Minion extends PhysicsBody {
       speed: 1,
       handler: this.walk.bind(this),
     },
+    dead: {
+      speed: 0,
+      handler: () => {},
+    },
   };
   currentState = this.animStates.idle;
 
   state = {
     direction: Directions.RIGHT,
   };
-
   debugMask: Graphics;
 
   constructor(world: World, initialVariation?: MinionVariation) {
@@ -53,11 +62,20 @@ export class Minion extends PhysicsBody {
     if (initialVariation) {
       this.variation = initialVariation;
     }
-
+    this.id = Minion.UID++;
     this.debugMask = this.variation.drawMask();
     this.debugMask.onclick = this.onClick.bind(this);
     this.addChild(this.debugMask);
     this.setState(this.animStates.walk);
+    this.updateGlobalMaps();
+  }
+
+  updateGlobalMaps() {
+    // console.log(`Adding minion ${this.id} to global maps`);
+    colliderToEntity.get().set(this.collider.handle, {
+      type: 'minion',
+      id: this.id,
+    });
   }
 
   /**
@@ -73,6 +91,7 @@ export class Minion extends PhysicsBody {
       pxToM(Minion.HEIGHT_PX),
       newVariation.gravityScale,
     );
+    this.updateGlobalMaps();
 
     // Update mask
     this.removeChild(this.debugMask);
@@ -112,6 +131,10 @@ export class Minion extends PhysicsBody {
     } else {
       this.setVariation(new DefaultMinion());
     }
+  }
+
+  kill() {
+    this.setState(this.animStates.dead);
   }
 
   onResize(width: number, height: number) {}

@@ -7,6 +7,7 @@ import { Fan } from '../prefabs/Fan';
 import { pxToM } from '../prefabs/PhysicsBody';
 import { DefaultMinion } from '../prefabs/DefaultMinion';
 import { FatMinion } from '../prefabs/FatMinion';
+import { minionMap } from '../store';
 
 const gravity = {
   x: 0,
@@ -45,6 +46,9 @@ export default class Game extends Scene {
     this.minions = Array.from({ length: MINION_COUNT }, () => {
       const minion = new Minion(this.world);
       this.addChild(minion);
+
+      // Add minion to global minion map
+      minionMap.get().set(minion.id, minion);
       return minion;
     });
 

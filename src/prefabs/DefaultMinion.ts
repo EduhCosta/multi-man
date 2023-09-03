@@ -1,9 +1,9 @@
-
 import { Minion, MinionVariation } from './Minion';
 import { Graphics } from 'pixi.js';
 import * as PIXI from 'pixi.js';
 
 export class DefaultMinion implements MinionVariation {
+  type = 'default' as const;
   WIDTH_PX = 50;
   HEIGHT_PX = 200;
   gravityScale = 1;
