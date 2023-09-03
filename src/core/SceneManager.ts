@@ -27,7 +27,6 @@ export default class SceneManager {
 
     window.addEventListener('resize', (ev: UIEvent) => {
       const target = ev.target as Window;
-
       this.currentScene?.onResize?.(target.innerWidth, target.innerHeight);
     });
 

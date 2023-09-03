@@ -8,7 +8,11 @@ import {
   RigidBody,
   Collider,
 } from '@dimforge/rapier2d';
-import { Directions } from './Minion';
+
+export enum Directions {
+  LEFT = -1,
+  RIGHT = 1,
+}
 
 export function pxToM(px: number) {
   return px / 32;
@@ -23,10 +27,14 @@ const collisionGroups = {
 };
 
 export class PhysicsBody extends Container {
+  DEFAULT_GRAVITY_SCALE = 1;
+
   // Rapier physics properties
   world: World;
+  rigidBodyDesc: RigidBodyDesc;
   rigidBody: RigidBody;
   bodyHandle: RigidBodyHandle;
+  colliderDesc: ColliderDesc;
   collider: Collider;
   colliderHandle: ColliderHandle;
 
@@ -39,21 +47,24 @@ export class PhysicsBody extends Container {
     this.world = world;
 
     // Create a dynamic rigid-body.
-    const rigidBodyDesc = RigidBodyDesc.dynamic()
+    this.rigidBodyDesc = RigidBodyDesc.dynamic()
       .setTranslation(pxToM(window.innerWidth) * Math.random(), 0)
       .lockRotations(); // prevent rotations.
 
-    this.rigidBody = this.world.createRigidBody(rigidBodyDesc);
+    this.rigidBody = this.world.createRigidBody(this.rigidBodyDesc);
 
     this.bodyHandle = this.rigidBody.handle;
 
     // Create a cuboid collider attached to the dynamic rigidBody.
-    const colliderDesc = ColliderDesc.cuboid(width / 2, height / 2)
+    this.colliderDesc = ColliderDesc.cuboid(width / 2, height / 2)
       .setCollisionGroups(
         (this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION,
       )
       .setSolverGroups((this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION); // Set the membership and filter
-    this.collider = this.world.createCollider(colliderDesc, this.rigidBody);
+    this.collider = this.world.createCollider(
+      this.colliderDesc,
+      this.rigidBody,
+    );
     this.collider.setDensity(1.0);
     this.colliderHandle = this.collider.handle;
   }
@@ -78,5 +89,28 @@ export class PhysicsBody extends Container {
       const { x: curX, y: curY } = this.rigidBody.linvel();
       this.rigidBody.setLinvel({ x: -1 * curX, y: curY }, true);
     }
+  }
+
+  updateCollider(widthM: number, heightM: number, gravityScale: number) {
+    // Remove old collider
+    this.world.removeCollider(this.collider, true);
+
+    // Create new collider
+    this.colliderDesc = ColliderDesc.cuboid(widthM / 2, heightM / 2)
+      .setCollisionGroups(
+        (this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION,
+      )
+      .setSolverGroups((this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION); // Set the membership and filter
+    this.collider = this.world.createCollider(
+      this.colliderDesc,
+      this.rigidBody,
+    );
+    this.collider.setDensity(1.0);
+    this.rigidBody.setGravityScale(gravityScale, true);
+    this.colliderHandle = this.collider.handle;
+  }
+
+  setMass(newMass: number) {
+    this.rigidBody.setGravityScale(newMass, true);
   }
 }

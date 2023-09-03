@@ -11,6 +11,7 @@ export class Fan extends Container {
   static WIDTH_PX = 100;
   static HEIGHT_PX = 500;
   world: World;
+  colliderDesc: ColliderDesc;
   collider: Collider;
   colliderHandle: ColliderHandle;
 
@@ -26,23 +27,24 @@ export class Fan extends Container {
     this.addChild(mask);
 
     // Create a cuboid collider
-    const colliderDesc = ColliderDesc.cuboid(
+    this.colliderDesc = ColliderDesc.cuboid(
       pxToM(Fan.WIDTH_PX),
       pxToM(Fan.HEIGHT_PX),
     );
-    colliderDesc.setTranslation(
+    this.colliderDesc.setTranslation(
       pxToM(window.innerWidth - 300),
       pxToM(-1 * (window.innerHeight - 500)),
     );
-    colliderDesc.setSensor(true);
-    this.collider = this.world.createCollider(colliderDesc);
+
+    this.colliderDesc.setSensor(true);
+    this.collider = this.world.createCollider(this.colliderDesc);
     this.colliderHandle = this.collider.handle;
   }
 
   onCollision(collider2: Collider) {
     const rigidBody = collider2.parent();
     if (!rigidBody) return;
-    rigidBody.applyImpulse({ x: 0, y: 10 }, true);
+    rigidBody.applyImpulse({ x: 0, y: 4 }, true);
   }
 
   update() {
@@ -54,5 +56,12 @@ export class Fan extends Container {
 
     this.x = mToPx(this.collider.translation().x) - Fan.WIDTH_PX / 2;
     this.y = mToPx(-1 * this.collider.translation().y) + Fan.HEIGHT_PX / 2;
+  }
+
+  onResize(width: number, height: number) {
+    this.colliderDesc.setTranslation(
+      pxToM(window.innerWidth - 300),
+      pxToM(-1 * (window.innerHeight - 500)),
+    );
   }
 }

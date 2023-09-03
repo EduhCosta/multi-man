@@ -5,6 +5,8 @@ import { SceneUtils } from '../core/SceneManager';
 import * as RAPIER from '@dimforge/rapier2d';
 import { Fan } from '../prefabs/Fan';
 import { pxToM } from '../prefabs/PhysicsBody';
+import { DefaultMinion } from '../prefabs/DefaultMinion';
+import { FatMinion } from '../prefabs/FatMinion';
 
 const gravity = {
   x: 0,
@@ -20,6 +22,8 @@ export default class Game extends Scene {
 
   private minions!: Minion[];
   public world: RAPIER.World;
+  private groundColliderDesc: RAPIER.ColliderDesc;
+  private groundCollider: RAPIER.Collider;
   private fan!: Fan;
 
   constructor(app: Application, protected utils: SceneUtils) {
@@ -27,12 +31,12 @@ export default class Game extends Scene {
     this.app = app;
     this.world = new RAPIER.World(gravity);
 
-    const groundColliderDesc = RAPIER.ColliderDesc.cuboid(
+    this.groundColliderDesc = RAPIER.ColliderDesc.cuboid(
       pxToM(window.innerWidth),
       10,
     );
-    groundColliderDesc.setTranslation(0, -1 * pxToM(window.innerHeight));
-    const groundCollider = this.world.createCollider(groundColliderDesc);
+    this.groundColliderDesc.setTranslation(0, -1 * pxToM(window.innerHeight));
+    this.groundCollider = this.world.createCollider(this.groundColliderDesc);
     this.app.stage.addChild(groundGraphics);
   }
 
@@ -40,8 +44,6 @@ export default class Game extends Scene {
     await this.utils.assetLoader.loadAssetsGroup('Game');
     this.minions = Array.from({ length: MINION_COUNT }, () => {
       const minion = new Minion(this.world);
-      minion.x = window.innerWidth / 2;
-      minion.y = window.innerHeight - 1.5 * minion.height;
       this.addChild(minion);
       return minion;
     });
@@ -50,7 +52,17 @@ export default class Game extends Scene {
     this.addChild(this.fan);
   }
 
-  onResize(width: number, height: number) {}
+  onResize(width: number, height: number) {
+    this.world.removeCollider(this.groundCollider, true);
+    this.groundColliderDesc = RAPIER.ColliderDesc.cuboid(pxToM(width), 10);
+    this.groundColliderDesc.setTranslation(0, -1 * pxToM(window.innerHeight));
+    this.groundCollider = this.world.createCollider(this.groundColliderDesc);
+    this.minions.forEach((minion) => {
+      minion.onResize(width, height);
+    });
+    this.fan.onResize(width, height);
+  }
+
   async start() {}
 
   update(delta: number) {
