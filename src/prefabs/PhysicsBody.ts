@@ -26,20 +26,29 @@ export class PhysicsBody extends Container {
   collider: Collider;
   colliderHandle: ColliderHandle;
 
+  // Define a collision group just for minions.
+  MINION_GROUP = 0x0001; // First bit represents minion group
+  EVERYTHING_BUT_MINION = 0xfffe; // All bits set except the minion group bit
+
   constructor(world: World, width: number, height: number) {
     super();
     this.world = world;
 
     // Create a dynamic rigid-body.
     const rigidBodyDesc = RigidBodyDesc.dynamic()
-      .setTranslation(0.0, 0)
+      .setTranslation(pxToM(window.innerWidth) * Math.random(), 0)
       .lockRotations(); // prevent rotations.
 
     this.rigidBody = this.world.createRigidBody(rigidBodyDesc);
+
     this.bodyHandle = this.rigidBody.handle;
 
     // Create a cuboid collider attached to the dynamic rigidBody.
-    const colliderDesc = ColliderDesc.cuboid(width / 2, height / 2);
+    const colliderDesc = ColliderDesc.cuboid(width / 2, height / 2)
+      .setCollisionGroups(
+        (this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION,
+      )
+      .setSolverGroups((this.MINION_GROUP << 16) | this.EVERYTHING_BUT_MINION); // Set the membership and filter
     this.collider = this.world.createCollider(colliderDesc, this.rigidBody);
     this.colliderHandle = this.collider.handle;
   }

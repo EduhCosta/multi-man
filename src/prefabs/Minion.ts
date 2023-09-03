@@ -13,6 +13,7 @@ export class Minion extends PhysicsBody {
   static WIDTH_PX = 100;
   static HEIGHT_PX = 200;
 
+
   config = {
     speed: 5,
     turnDuration: 0.15,
@@ -41,7 +42,13 @@ export class Minion extends PhysicsBody {
 
     // temporary mask
     const mask = new Graphics();
-    mask.beginFill(0x00ff00);
+
+    const getRandomHex = () => {
+      return Math.floor(Math.random() * 255);
+    };
+    mask.beginFill(
+      (getRandomHex() << 16) | (getRandomHex() << 8) | getRandomHex(),
+    );
     mask.drawRect(0, 0, Minion.WIDTH_PX, Minion.HEIGHT_PX);
     mask.endFill();
     this.addChild(mask);
@@ -54,7 +61,7 @@ export class Minion extends PhysicsBody {
       this.rigidBody.linvel().x < 0 ? Directions.LEFT : Directions.RIGHT;
     this.rigidBody.setLinvel(
       {
-        x: this.config.speed * direction,
+        x: (this.config.speed - 2 * Math.random() )* direction,
         y: this.rigidBody.linvel().y,
       },
       true,

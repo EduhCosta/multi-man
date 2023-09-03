@@ -15,7 +15,7 @@ const groundGraphics = new Graphics();
 export default class Game extends Scene {
   name = 'Game';
 
-  private minion!: Minion;
+  private minions!: Minion[];
   public world: RAPIER.World;
 
   constructor(app: Application, protected utils: SceneUtils) {
@@ -34,10 +34,16 @@ export default class Game extends Scene {
 
   async load() {
     await this.utils.assetLoader.loadAssetsGroup('Game');
-    this.minion = new Minion(this.world);
-    this.minion.x = window.innerWidth / 2;
-    this.minion.y = window.innerHeight - 1.5 * this.minion.height;
-    this.addChild(this.minion);
+
+    const MINION_COUNT = 5;
+
+    this.minions = Array.from({ length: MINION_COUNT }, () => {
+      const minion = new Minion(this.world);
+      minion.x = window.innerWidth / 2;
+      minion.y = window.innerHeight - 1.5 * minion.height;
+      this.addChild(minion);
+      return minion;
+    });
   }
 
   onResize(width: number, height: number) {}
@@ -48,7 +54,10 @@ export default class Game extends Scene {
     this.world.step();
     groundGraphics.clear();
 
-    this.minion.update();
+    // Update minions
+    this.minions.forEach((minion) => {
+      minion.update();
+    });
 
     const buffers = this.world.debugRender();
     const vtx = buffers.vertices;
