@@ -27,6 +27,12 @@ export default class Endline extends Container {
 
     this.addChild(sprite);
 
+    const light = Sprite.from('Game/images/light.png');
+    light.anchor.set(0.5);
+
+    this.addChild(sprite);
+    this.addChild(light);
+
     this.x = mToPx(this.collider.translation().x) - Endline.WIDTH_PX / 2;
     this.y = -mToPx(this.collider.translation().y) - Endline.HEIGHT_PX / 2;
   }

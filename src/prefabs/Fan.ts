@@ -1,4 +1,4 @@
-import { Container, Graphics, Rectangle } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite } from 'pixi.js';
 import { mToPx, pxToM } from './PhysicsBody';
 import {
   Collider,
@@ -10,16 +10,18 @@ import { colliderToEntity, minionMap } from '../store';
 import { Toggleable } from './types';
 
 export class Fan extends Container implements Toggleable {
-  static WIDTH_PX = 100;
+  static WIDTH_PX = 175;
   static HEIGHT_PX = 500;
   world: World;
   colliderDesc: ColliderDesc;
   collider: Collider;
   colliderHandle: ColliderHandle;
-  debugMask: Graphics;
+
+  fan: Sprite;
+  wind: Sprite;
 
   state = {
-    enabled: true,
+    enabled: false,
     destroyed: false,
   };
 
@@ -27,9 +29,22 @@ export class Fan extends Container implements Toggleable {
     super();
     this.world = world;
 
-    this.debugMask = this.drawMask();
-    this.addChild(this.debugMask);
+    this.sortableChildren = true;
 
+    this.fan = Sprite.from('Game/images/fan.png');
+    this.fan.zIndex = 1;
+    this.fan.anchor.set(.3, -.5);
+
+    this.wind = Sprite.from('Game/images/wind.png');
+    this.wind.zIndex = -1;
+    this.wind.visible = this.state.enabled;
+    this.wind.position.y -= 1000;
+    this.wind.position.x -= 100;
+
+    this.addChild(this.fan);
+    this.addChild(this.wind);
+
+    this.sortChildren();
     // Create a cuboid collider
     this.colliderDesc = ColliderDesc.cuboid(
       pxToM(Fan.WIDTH_PX),
@@ -66,7 +81,7 @@ export class Fan extends Container implements Toggleable {
       minion.kill();
       this.destroy();
     }
-    rigidBody.applyImpulse({ x: 0, y: 3 }, true);
+    rigidBody.applyImpulse({ x: 0, y: 2.5 }, true);
   }
 
   enable() {
@@ -80,12 +95,8 @@ export class Fan extends Container implements Toggleable {
   }
 
   updateMask() {
-    // Update mask
-    if (this.debugMask) {
-      this.removeChild(this.debugMask);
-    }
-    this.debugMask = this.drawMask();
-    this.addChild(this.debugMask);
+    const enabled = this.state.enabled && !this.state.destroyed;
+    this.wind.visible = enabled;
   }
 
   drawMask() {

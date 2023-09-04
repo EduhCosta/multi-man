@@ -35,7 +35,7 @@ export default class Level1 extends Scene {
     const ground = new Platform(
       this.world,
       { x: 0, y: 0 },
-      { width: window.innerWidth, height: 30 },
+      { width: window.innerWidth, height: 35 },
       { src: 'Game/images/l1_plat.png', height: 250 },
     );
 
@@ -44,7 +44,7 @@ export default class Level1 extends Scene {
     const platform1 = new Platform(
       this.world,
       { x: 200, y: 500 },
-      { width: 200, height: 30 },
+      { width: 200, height: 35 },
     );
     this.state.platforms.push(platform1);
 
@@ -59,7 +59,7 @@ export default class Level1 extends Scene {
     // Create end point
     this.state.endLine = new Endline(this.world, {
       x: window.innerWidth - 2 * Endline.WIDTH_PX,
-      y: 2 * Endline.HEIGHT_PX,
+      y: Endline.HEIGHT_PX,
     });
     this.state.endLine.zIndex = 101;
     this.addChild(this.state.endLine);

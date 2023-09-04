@@ -52,6 +52,7 @@ export default class WinGame extends Scene {
     this.anim.play(WinGame.animStates.default);
     centerObjects(this.anim);
     this.anim.scale.set(-1, 1);
+    this.anim.position.x = window.innerWidth / 2 + 200;
     this.anim.position.y = 100;
 
     // Add elements to screen

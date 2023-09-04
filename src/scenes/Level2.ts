@@ -1,5 +1,5 @@
 import Scene from '../core/Scene';
-import { Application,Point } from 'pixi.js';
+import { Application, Point } from 'pixi.js';
 import { Minion } from '../prefabs/Minion';
 import { SceneUtils } from '../core/SceneManager';
 import { Fan } from '../prefabs/Fan';
@@ -7,8 +7,7 @@ import Platform from '../prefabs/Platform';
 import Endline from '../prefabs/EndLine';
 import { Button } from '../prefabs/Button';
 import { sceneManager } from '../main';
-
-
+import Background from '../prefabs/Background';
 
 export default class Game extends Scene {
   name = 'Level2';
@@ -21,7 +20,7 @@ export default class Game extends Scene {
     const ground = new Platform(
       this.world,
       { x: 0, y: 0 },
-      { width: window.innerWidth, height: 100 },
+      { width: window.innerWidth, height: 35 },
     );
 
     this.state.platforms.push(ground);
@@ -29,14 +28,14 @@ export default class Game extends Scene {
     const platform1 = new Platform(
       this.world,
       { x: 200, y: 500 },
-      { width: 200, height: 50 },
+      { width: 200, height: 35 },
     );
     this.state.platforms.push(platform1);
 
     const platform2 = new Platform(
       this.world,
       { x: window.innerWidth - 300, y: 500 },
-      { width: 300, height: 50 },
+      { width: 300, height: 35 },
     );
     this.state.platforms.push(platform2);
 
@@ -64,12 +63,18 @@ export default class Game extends Scene {
     // Create end point
     this.state.endLine = new Endline(this.world, {
       x: window.innerWidth - 2 * Endline.WIDTH_PX,
-      y: window.innerHeight - 2 * Endline.HEIGHT_PX,
+      y: window.innerHeight - 3.3 * Endline.HEIGHT_PX,
     });
     this.addChild(this.state.endLine);
   }
 
   async load() {
+    const bg = new Background();
+    bg.zIndex = -99;
+    this.sortableChildren = true;
+    this.sortChildren();
+    this.addChild(bg);
+
     this.loadPlatforms();
     this.loadEntities();
   }
@@ -96,7 +101,7 @@ export default class Game extends Scene {
   }
 
   nextLevel() {
-    localStorage.setItem('@multi-man/next-level', 'Level3');
+    localStorage.setItem('@multi-man/next-level', 'Level1');
     sceneManager.switchScene('WinGame');
   }
 }

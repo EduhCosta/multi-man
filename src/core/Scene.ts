@@ -150,23 +150,23 @@ export abstract class Scene extends Container implements IScene {
   update(delta: number) {
     // Step simulation forward
     this.world.step();
-    debugGraphics.clear();
+    // debugGraphics.clear();
 
     // Check win
     this.updateMinionStatus();
     this.checkWin();
 
     // Draw Collider Debug
-    const buffers = this.world.debugRender();
-    const vtx = buffers.vertices;
-    const cls = buffers.colors;
+    // const buffers = this.world.debugRender();
+    // const vtx = buffers.vertices;
+    // const cls = buffers.colors;
 
-    for (let i = 0; i < vtx.length / 4; i += 1) {
-      const color = 0xffffff;
-      debugGraphics.lineStyle(1.0, color, cls[i * 8 + 3], 0.5, true);
-      debugGraphics.moveTo(vtx[i * 4] * mToP, -vtx[i * 4 + 1] * mToP);
-      debugGraphics.lineTo(vtx[i * 4 + 2] * mToP, -vtx[i * 4 + 3] * mToP);
-    }
+    // for (let i = 0; i < vtx.length / 4; i += 1) {
+    //   const color = 0xffffff;
+    //   debugGraphics.lineStyle(1.0, color, cls[i * 8 + 3], 0.5, true);
+    //   debugGraphics.moveTo(vtx[i * 4] * mToP, -vtx[i * 4 + 1] * mToP);
+    //   debugGraphics.lineTo(vtx[i * 4 + 2] * mToP, -vtx[i * 4 + 3] * mToP);
+    // }
   }
 
   unload() {
